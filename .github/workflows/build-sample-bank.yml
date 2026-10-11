@@ -48,8 +48,8 @@ jobs:
           assert sum(map(len,groups.values()))==20
           for group,subpaths in groups.items():
               b={p:bank[p] for p in subpaths}
-              code='// Embedded CC0 WAV samples; see SAMPLES-LICENSE.md.\\n'
-              code+='window.BeatforgeSampleBank=Object.assign(window.BeatforgeSampleBank||{},'+json.dumps(b,separators=(',',':'))+');\\n'
+              code='// Embedded CC0 WAV samples; see SAMPLES-LICENSE.md.\n'
+              code+='window.BeatforgeSampleBank=Object.assign(window.BeatforgeSampleBank||{},'+json.dumps(b,separators=(',',':'))+');\n'
               Path('samplebank-'+group+'.js').write_text(code,encoding='utf-8')
               print(group,len(subpaths),'files',len(code),'characters')
           Path('samplebank.js').unlink(missing_ok=True)
