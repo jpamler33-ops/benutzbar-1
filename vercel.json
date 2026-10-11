@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/samples/:path*",
+      "destination": "https://raw.githubusercontent.com/jpamler33-ops/benutzbar-1/3b368abe57e864aa17c58bcd2aa298ec47c8d028/samples/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/samples/:path*",
+      "headers": [
+        {
+          "key": "x-vercel-enable-rewrite-caching",
+          "value": "1"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "public, max-age=86400"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    }
+  ]
+}
