@@ -124,6 +124,7 @@ select,input[type=number],input[type=text]{min-height:49px;border:1px solid #383
 <link rel="stylesheet" href="./groove-model.css" />
 <link rel="manifest" href="./manifest.webmanifest" />
 <link rel="apple-touch-icon" href="./icon-180.png" />
+<link rel="stylesheet" href="./sample-engine.css" />
 </head>
 <body>
 <div class="shell">
@@ -447,6 +448,8 @@ function synth(ctx,s,offset=0,bus=null){
  let step=toSec(s),swing=GENRES[s.genre].swing,notes=s.events;
  for(const e of notes){let pos=e.start,t=offset+pos*step+(Math.floor(pos)%2===1?step*swing:0),dur=clamp(e.dur*step,.03,3),v=e.vel,pitch=e.pitch,freq=440*Math.pow(2,(pitch-69)/12),out=channels[e.lane]||bus;
   if(t<0)continue;
+  // Play original WAV samples for drum and bass tracks, never fallback synthesis.
+  if(window.BeatforgeSampleEngine?.renderEvent(ctx,s,e,t,dur,v,out))continue;
   if(e.lane==='melody'){
    const tone=m.melodyTone||'soft';
    if(tone==='pluck')makeOsc(ctx,'triangle',freq,t,Math.min(.32,dur*.7),v*.26,out,2900);
@@ -479,6 +482,10 @@ function clearPlaybackTimers(){clearTimeout(loopTimer);clearTimeout(stopTimer);c
 function playSong(){
  if(!song||!song.events?.length){notify('Bitte zuerst einen Beat generieren.');return}
  if(playing){stopPlayback();return}
+ if(window.BeatforgeSampleEngine&&!window.BeatforgeSampleEngine.readyForSong(song)){
+  notify('Echte WAV-Samples werden geladen. Nach dem Laden erneut Play tippen.');
+  window.BeatforgeSampleEngine.ensureForSong(song).then(()=>notify('WAV-Samples bereit. Jetzt Play drücken.')).catch(e=>notify('Sample-Fehler: '+e.message));return;
+ }
  let ctx=null;
  try{
   const AC=window.AudioContext||window.webkitAudioContext;
@@ -579,7 +586,7 @@ function encodeMidi(s){const ppq=480,perStep=ppq/4,tempo=Math.round(60000000/s.b
  for(let lane of LANES){let events=[];for(let e of s.events.filter(e=>e.lane===lane.id)){let ch=channels[lane.id],pitch=drumMap[lane.id]??e.pitch,vel=clamp(Math.round(e.vel*110),1,127),tick=Math.max(0,Math.round(e.start*perStep)),end=tick+Math.max(1,Math.round(e.dur*perStep));events.push({tick,priority:1,data:[0x90+ch,pitch,vel]},{tick:end,priority:0,data:[0x80+ch,pitch,0]})}tracks.push(midiTrack(events,lane.name))}
  let data=[...strBytes('MThd'),...u32(6),...u16(1),...u16(tracks.length),...u16(ppq),...tracks.flat()];return new Uint8Array(data)}
 function encodeWav(buffer){let c=buffer.numberOfChannels,n=buffer.length,bytes=44+n*c*2,ab=new ArrayBuffer(bytes),v=new DataView(ab),offset=0;function putText(s){for(let ch of s)v.setUint8(offset++,ch.charCodeAt(0))}function u16v(n){v.setUint16(offset,n,true);offset+=2}function u32v(n){v.setUint32(offset,n,true);offset+=4}putText('RIFF');u32v(bytes-8);putText('WAVEfmt ');u32v(16);u16v(1);u16v(c);u32v(buffer.sampleRate);u32v(buffer.sampleRate*c*2);u16v(c*2);u16v(16);putText('data');u32v(n*c*2);let tracks=Array.from({length:c},(_,i)=>buffer.getChannelData(i));for(let i=0;i<n;i++){for(let k=0;k<c;k++){let sample=clamp(tracks[k][i],-1,1);v.setInt16(offset,sample<0?sample*32768:sample*32767,true);offset+=2}}return new Blob([ab],{type:'audio/wav'})}
-async function exportWav(){if(!song)return;let btn=$('exportWav');try{btn.disabled=true;btn.textContent='WAV wird gerendert …';let len=durationSec(song)+.4,sampleRate=44100;let ctx=new OfflineAudioContext(2,Math.ceil(len*sampleRate),sampleRate);synth(ctx,song,.04);let audio=await ctx.startRendering();downloadBlob(encodeWav(audio),filename('wav'),'audio/wav');notify('WAV-Datei exportiert.')}catch(e){notify('WAV-Export fehlgeschlagen: '+e.message)}finally{btn.disabled=false;btn.textContent='⇩ WAV · Audiomix'}}
+async function exportWav(){if(!song)return;let btn=$('exportWav');try{btn.disabled=true;btn.textContent='WAV wird gerendert …';await window.BeatforgeSampleEngine?.ensureForSong(song);let len=durationSec(song)+.4,sampleRate=44100;let ctx=new OfflineAudioContext(2,Math.ceil(len*sampleRate),sampleRate);synth(ctx,song,.04);let audio=await ctx.startRendering();downloadBlob(encodeWav(audio),filename('wav'),'audio/wav');notify('WAV-Datei exportiert.')}catch(e){notify('WAV-Export fehlgeschlagen: '+e.message)}finally{btn.disabled=false;btn.textContent='⇩ WAV · Audiomix'}}
 function readVLen(data,at){let n=0,x,count=0;do{if(at>=data.length)throw Error('MIDI unerwartet zu Ende');x=data[at++];n=(n<<7)|(x&127);if(++count>4)throw Error('Ungültige MIDI-Längenangabe')}while(x&128);return [n,at]}
 function parseMidi(buf){let d=new Uint8Array(buf),p=0;function readAscii(n){let s='';while(n--){if(p>=d.length)throw Error('Unvollständige MIDI');s+=String.fromCharCode(d[p++])}return s}function read16(){if(p+2>d.length)throw Error('Datei unvollständig');let x=(d[p]<<8)|d[p+1];p+=2;return x}function read32(){if(p+4>d.length)throw Error('Datei unvollständig');let x=(d[p]*16777216+d[p+1]*65536+d[p+2]*256+d[p+3]);p+=4;return x}if(readAscii(4)!=='MThd')throw Error('Keine gültige Standard-MIDI-Datei');let headerLength=read32(),format=read16(),trackCount=read16(),division=read16();if(headerLength<6||division&32768)throw Error('MIDI-Format nicht unterstützt (SMPTE-Timing)');p+=headerLength-6;if(format>1||trackCount>128)throw Error('MIDI-Format nicht unterstützt');let notes=[],tempo=500000;
  for(let tr=0;tr<trackCount;tr++){if(readAscii(4)!=='MTrk')throw Error('Defekter MIDI-Track');let size=read32(),end=p+size;if(end>d.length)throw Error('Unvollständiger MIDI-Track');let tick=0,status=0,active=new Map();while(p<end){let [delta,nx]=readVLen(d,p);p=nx;tick+=delta;let byte=d[p];if(byte<128){if(status<128||status>=240)throw Error('Ungültiger MIDI-Running-Status')}else{status=d[p++]}if(status===255){let typ=d[p++],len;[len,p]=readVLen(d,p);if(typ===81&&len===3)tempo=(d[p]<<16)|(d[p+1]<<8)|d[p+2];p+=len;continue}if(status===240||status===247){let len;[len,p]=readVLen(d,p);p+=len;continue}let action=status&240,chan=status&15,vals=(action===192||action===208)?1:2;let pitch=d[p++],vel=vals===2?d[p++]:0;if(action===144&&vel>0){let k=chan+':'+pitch;if(!active.has(k))active.set(k,[]);active.get(k).push({tick,pitch,vel,chan})}else if(action===128||(action===144&&vel===0)){let k=chan+':'+pitch,ar=active.get(k);if(ar?.length){let n=ar.shift();notes.push({...n,duration:Math.max(1,tick-n.tick)})}}if(notes.length>30000)throw Error('MIDI zu groß (>30.000 Noten)')}
@@ -662,7 +669,7 @@ window.Beatforge={getSong:()=>deepClone(song),getState:()=>deepClone(state),gene
  const shell=document.querySelector('.shell');
  const appbar=document.createElement('header');
  appbar.className='pocket-bar';
- appbar.innerHTML=`<div class="pocket-identity"><div class="pocket-mark">≋</div><div><div class="pocket-name">BEATFORGE</div><div class="pocket-sub">POCKET STUDIO · V1.2</div></div></div><span class="pocket-status">LOKAL</span>`;
+ appbar.innerHTML=`<div class="pocket-identity"><div class="pocket-mark">≋</div><div><div class="pocket-name">BEATFORGE</div><div class="pocket-sub">POCKET STUDIO · V5 · REAL WAV</div></div></div><span class="pocket-status">LOKAL</span>`;
  const stage=document.createElement('div');stage.className='pocket-stage';
  const tabs={};
  for(const id of ['studio','editor','ideas','learn','export']){
@@ -703,7 +710,7 @@ window.Beatforge={getSong:()=>deepClone(song),getState:()=>deepClone(state),gene
  tabs.learn.append(learning,importer,training);
  const exportIntro=document.createElement('div');exportIntro.className='pocket-intro';exportIntro.innerHTML='<div class="pocket-kicker">SAVE · SHARE · PRODUCE</div><h1>Deine <span>Exports.</span></h1><p>Schicke Melodien als MIDI in FL Studio Mobile oder sichere deinen Beat als WAV.</p>';
  tabs.export.append(exportIntro,exportBox);
- const exportTip=document.createElement('p');exportTip.className='pocket-export-tip';exportTip.textContent='iPhone: Öffne einen Export über den Teilen-Dialog und wähle „In Dateien sichern“. MIDI lässt sich anschließend in kompatible Musik-Apps importieren. WAV verwendet einfache Synthesizer-Klänge.';tabs.export.append(exportTip);
+ const exportTip=document.createElement('p');exportTip.className='pocket-export-tip';exportTip.textContent='iPhone: Öffne einen Export über den Teilen-Dialog und wähle „In Dateien sichern“. MIDI lässt sich anschließend in kompatible Musik-Apps importieren. WAV nutzt echte Drums und 808-Samples; Melodie/Akkorde bleiben Synthesizer.';tabs.export.append(exportTip);
  // Place the new mobile shell and remove only the old wrappers, not their moved descendants.
  shell.insertBefore(appbar,shell.firstChild);
  shell.append(stage);
@@ -734,6 +741,7 @@ window.Beatforge={getSong:()=>deepClone(song),getState:()=>deepClone(state),gene
 <script src="./producer.js"></script>
 <script src="./audio-learning.js"></script>
 <script src="./groove-model.js"></script>
+<script src="./sample-engine.js"></script>
 <script>
 if ('serviceWorker' in navigator && location.protocol==='https:') {
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
