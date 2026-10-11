@@ -1,0 +1,40 @@
+name: Train licensed groove model
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/train_grooves.py'
+      - '.github/workflows/train-licensed-grooves.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: true
+      - name: Download, verify and train licensed JSON labels
+        run: python3 tools/train_grooves.py --output groove-model.json
+      - name: Validate provenance and model statistics
+        run: |
+          python3 - <<'PY'
+          import json
+          m=json.load(open('groove-model.json'))
+          assert m['trained'] and m['meta']['samples_used']>=20
+          assert m['meta']['license']=='CC BY 4.0'
+          for lane in m['lanes']:
+            assert len(m['data']['all']['p'][lane])==16
+          print('VALID:',m['meta']['samples_used'],'labeled examples')
+          PY
+      - name: Commit trained probability model
+        run: |
+          git config user.name 'beatforge-training-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add groove-model.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Train Groove Prior from WaivOps HH-TRP labels [skip ci]'
+            git push origin main
+          fi
