@@ -1,7 +1,7 @@
 {
-  "name": "BeatForge Pocket Studio",
-  "short_name": "BeatForge",
-  "description": "Melodien, Beats und Drums erzeugen und aus Feedback lernen",
+  "name": "BeatForge Producer — Mobile Studio",
+  "short_name": "BeatForge PRO",
+  "description": "Mobiles Musikproduktionsstudio mit Piano Roll, Sequencer, Mix und Stems",
   "lang": "de-DE",
   "start_url": "./index.html",
   "scope": "./",
