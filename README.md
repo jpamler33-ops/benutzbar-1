@@ -42,9 +42,10 @@ Touch piano roll, 7-track mixer with solo/mute, 808 synthesis, tempo edits, undo
 `test_audio_learn.py` exercises real Web Audio decoding of synthetic WAV reference files in Chromium, learned style feature persistence, generation and export. `test_pro.py` covers producer controls, audio player, MIDI/WAV exports. A synthetic WAV regression for 120 BPM verified detected BPM=120, with kick onsets around steps 4 and 12. Browser tests do not substitute for actual iPhone Safari audio/permission testing.
 
 
-## WaivOps Label Model v4
+## Human-played Groove Model v4
 
-- Source: WaivOps HH-TRP (CC BY 4.0), DOI: https://doi.org/10.5281/zenodo.15734094
-- Generator supports `groove-model.json` **only after** verified labeled training. Training is run via `.github/workflows/train-licensed-grooves.yml` / `tools/train_grooves.py`.
-- Until real dataset download, schema validation and supervised training succeed, the UI explicitly says 'not trained'; no synthetic test fixture is published as a dataset-trained model.
-- The new generator learns sixteen-step kick/snare/hat hit probabilities and first-order dependencies and samples *new* rhythms. It does not train a neural audio diffusion model or learn melodic phrasing.
+- Trained only if the official Google Magenta Groove MIDI Dataset (GMD v1.0.0) is fetched and SHA-256 verified. Dataset: https://magenta.tensorflow.org/datasets/groove
+- Copyright Google LLC / CC BY 4.0. Citation: Gillick et al., Learning to Groove with Inverse Sequence Transformations, ICML 2019.
+- Build: Python 3 + mido 1.3.3, `python tools/train_grooves.py`, or GitHub Actions `train-licensed-grooves.yml`. Only the derived ~kB JSON model is published; MIDI/audio files remain with Google.
+- Model learns step-wise and first-order drum-hit probabilities from real performed MIDI, partitioned by actual performances for evaluation. It does NOT learn Trap-specific production, melodies or sample libraries.
+- The GMD model is ignored unless `groove-model.json` is valid and points to the official source; no fictitious training indicator.
