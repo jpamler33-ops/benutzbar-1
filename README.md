@@ -1,3 +1,22 @@
+# BeatForge Producer v5 – Real WAV Sample Engine
+
+**Web-App:** https://beatforge-pocket.vercel.app
+
+### Live sound engine
+- **20 real prerecorded WAV one-shots**, covering Kick, Snare, Closed/Open Hi-Hat, Clap and 808 Bass.
+- **Three selectable CC0 kits:** Hard Trap, Bounce, Soulful Vintage.
+- Per-sample audition pads, selectable alternatives where available, Snare+Clap layer and editable 808 root key (initial assumption C2).
+- All original WAV files live in the repository under `samples/`. A deterministic GitHub Action checks their WAV signatures and generates four embedded `samplebank-*.js` bundles.
+- Browser decodes original WAV samples via Web Audio; **no synthesized fallback** for the bass/drum tracks. The existing generated groove patterns still decide *when* to trigger samples.
+- Full-mix WAV and per-track WAV stems use the same decoded samples. PWA service worker caches the four banks for offline usage.
+- **Melody and chord instruments remain synthesized** – only the drum and 808 sound sources have been replaced.
+- This project does not include recordings of songs by third-party artists. Sources, original licensors, and limitations are documented in [SAMPLES-LICENSE.md](./SAMPLES-LICENSE.md).
+
+### iPhone
+Open the page in Safari, choose a kit, wait for "alle WAV-Samples einsatzbereit", then tap Play. Use Safari Share > Add to Home Screen. Existing installed versions may need refreshing to load the new sample banks.
+
+---
+
 # BeatForge Producer 3.0 — Audio Learn
 
 Mobile-first, offline-capable PWA for beat sketches and local, adaptive reference learning. No backend, registration, external APIs or uploading audio to a server.
