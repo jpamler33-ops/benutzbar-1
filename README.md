@@ -1,28 +1,14 @@
-# BeatForge Producer 2.0
+# BeatForge Producer 3.0 · Audio Learn
 
-Mobile-first, local-first music composition and production prototype. Free static PWA; no backend, sign-in, AI API fees, or copyrighted sound packs.
+Mobile-first beat studio with local feature learning from owned or appropriately licensed audio references.
 
-## Working features
+## Real-beat learning
+Open **Lernen → Aus echten Beats lernen**. Select a WAV/MP3 file, confirm rights, optionally supply the BPM, then analyze. The browser extracts 16-step onset-derived kick/snare/hat profiles, tempo estimates, brightness, low-frequency energy and transient activity. The original recording is not stored or uploaded by this application. The extracted groove influences **new drum patterns** for the selected genre. Optional tempo matching can be enabled. We do not reconstruct melody, isolate instrument stems or train a neural network.
 
-- 7 genre presets and adaptive rhythm/harmony generator (feedback is rule-based, NOT AI neural training)
-- Touch piano roll for 3 pitched lanes, note length, transposition, scale guidance, bar navigation
-- 7-track step sequencer for drums; full bar copy/paste/clear, Undo/Redo
-- 7-track volume, mute, solo mixer and master gain; select melody and 808 timbres
-- Tempo, song title, autosaved working session in local browser storage
-- Multitrack MIDI export, stereo WAV mix export, isolated WAV stems, import/export project JSON
-- Responsive touch layout, browser audio test, offline PWA after first install and caching
+## Other features
+Piano roll, touch sequencer, seven-channel mixer, volume/mute/solo, beats and variations, user feedback, MIDI import/export, WAV mix/stem export, autosaved projects and offline-capable PWA.
 
-## iPhone install
+## Limits & privacy
+Up to 28MB/150 seconds per audio reference, up to 20 saved derived profiles; shorter clips work best on mobile. Automatic BPM and band separation are estimates, especially unreliable for complex mastered songs. Audio stays on device; style profiles reside in browser localStorage and are included in the training-data export. Back up before deleting browser data.
 
-Open the public HTTPS site in Safari > Share > Add to Home Screen. Restart from Safari if using a stale home-screen icon. Volume may depend on audio output route and Safari gesture restrictions.
-
-## Important limitations
-
-- Quality: synth demo instruments, no studio-grade sampled libraries / mixing/mastering engine.
-- Song/session and rating storage lives in each browser origin. Clearing Safari data deletes it. Export projects regularly.
-- Ratings adjust next generations through statistical feature weighting; it does not train a neural model on audio.
-- MIDI references require rights; do not upload unlicensed recordings to a future training service.
-
-## Developer notes
-
-Static HTML, CSS, JS, no runtime dependencies. Smoke tests in test_pro.py.
+Files: index.html, producer.js/css, audio-learning.js/css, sw.js, manifest.webmanifest, icons. No external runtime dependencies.
