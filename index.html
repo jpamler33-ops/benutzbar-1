@@ -119,12 +119,13 @@ select,input[type=number],input[type=text]{min-height:49px;border:1px solid #383
 @media(prefers-reduced-motion:reduce){.pocket-tab{animation:none};html{scroll-behavior:auto}}
 
 </style>
+<link rel="stylesheet" href="./producer.css" />
 <link rel="manifest" href="./manifest.webmanifest" />
 <link rel="apple-touch-icon" href="./icon-180.png" />
 </head>
 <body>
 <div class="shell">
-<header class="top"><div class="identity"><div class="brand-mark">≋</div><div><div class="brand-name">BEATFORGE <span class="version">/ LAB</span></div><div class="eyebrow">Adaptive music engine · Local-first</div></div></div><div class="header-meta"><span class="tag"><span class="dot"></span> Offline Engine</span><span class="tag">v1.2 · Audio Fix</span></div></header>
+<header class="top"><div class="identity"><div class="brand-mark">≋</div><div><div class="brand-name">BEATFORGE <span class="version">/ PRODUCER</span></div><div class="eyebrow">Adaptive music engine · Local-first</div></div></div><div class="header-meta"><span class="tag"><span class="dot"></span> Offline Engine</span><span class="tag">v2.0 · Producer</span></div></header>
 <section class="hero"><div><div class="eyebrow" style="margin-bottom:7px">GENERATE · LISTEN · LEARN · EXPORT</div><h1>Ideen werden zu <span>Tracks.</span></h1><p>Melodien, Akkorde, 808s und Drums automatisch erzeugen. Bewerte die besten Beats – die Engine passt ihre nächste Generation daran an.</p></div><div class="hero-stats"><div class="stat"><strong id="generatedCount">0</strong><small>Tracks erzeugt</small></div><div class="stat"><strong id="likedCount">0</strong><small>Gute Beispiele</small></div><div class="stat"><strong id="referenceCount">0</strong><small>MIDI-Referenzen</small></div></div></section>
 <div class="layout">
 <aside class="column">
@@ -301,11 +302,13 @@ function buildSong(overrides={},regenPart=null){
 }
 function updateSong(type='new'){
  stopPlayback();
+ const previousMix=song?.mix?deepClone(song.mix):null;
  if(type==='variation'&&song){let prev=song;const next=buildSong({genre:prev.genre,root:prev.root,scale:prev.scale,bpm:prev.bpm,bars:prev.bars,energy:prev.energy,complexity:prev.complexity,influence:prev.influence});next.progression=prev.progression.slice();next.events=[];fillNotes(next,rng(next.seed),learnBias(next.genre,next.influence,rng(next.seed^612)));song=next}
  else if(type==='surprise'){const r=Math.random;let genres=Object.keys(GENRES);let g=choose(r,genres);$('genre').value=g;applyGenre(true);$('key').value=rint(r,0,11);$('energy').value=rint(r,25,95);$('complexity').value=rint(r,25,90);updateRanges();song=buildSong()}
  else song=buildSong();
  state.generated++;
  state.history.push({features:featuresOf(song),at:Date.now(),id:song.id,source:'generated'});state.history=state.history.slice(-150);
+ if(previousMix)song.mix=previousMix;
  selectedBar=0;persist();renderAll();notify('Neuer Beat erzeugt. Bewerte ihn, damit die Engine lernt.');
 }
 function regenerate(part){if(!song)return;stopPlayback();let s=deepClone(song);s.id=Date.now().toString(36)+'-'+Math.floor(Math.random()*1e8).toString(36);s.seed=randomSeed();s.rated=0;s.createdAt=Date.now();let r=rng(s.seed);let bias=learnBias(s.genre,s.influence,r);let parts=part==='drums'?['drums']:[part];let names=part==='drums'?DRUMS:[part];s.events=s.events.filter(e=>!names.includes(e.lane));fillNotes(s,r,bias,parts);song=s;state.generated++;state.history.push({features:featuresOf(s),at:Date.now(),id:s.id,source:'generated'});state.history=state.history.slice(-150);persist();renderAll();notify('Spur neu erzeugt. Andere Spuren bleiben erhalten.');}
@@ -349,8 +352,8 @@ function onRate(rating){if(!song)return;if(song.rated===rating){notify('Dieser B
 function toSec(s){return 60/s.bpm/4}
 function durationSec(s){return s.bars*16*toSec(s)}
 function timeString(n){n=Math.floor(Math.max(0,n));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
-function renderAll(){renderSong();renderLanes();renderMemory();renderBatch();renderLibrary();renderReference();drawTimeline();}
-function renderSong(){if(!song)return;let cfg=GENRES[song.genre],dur=durationSec(song);$('songName').textContent=cfg.name+' / '+PITCH_NAMES[song.root]+' '+song.scale.toUpperCase()+' · #'+song.id.slice(-4).toUpperCase();$('songSummary').textContent='Generativ komponiert · '+new Date(song.createdAt).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' · Seed '+song.seed;$('timeDisplay').textContent='00:00 / '+timeString(dur);$('metaChips').innerHTML='';[song.bpm+' BPM',song.bars+' Takte',song.events.filter(e=>e.lane==='melody').length+' Melodienoten',song.events.length+' Events',song.progression.map(d=>['I','II','III','IV','V','VI','VII'][d]).join(' – ')].forEach(c=>{let el=document.createElement('span');el.className='chip';el.textContent=c;$('metaChips').appendChild(el)});$('learningBadge').textContent=song.rated===1?'POSITIV':song.rated===-1?'NEGATIV':song.biasUsed?'ADAPTIV':'NEU';$('learningBadge').classList.toggle('off',song.rated!==1&& !song.biasUsed);$('save').textContent=state.library.some(t=>t.id===song.id)?'♥ Gespeichert':'♡ Speichern';}
+function renderAll(){renderSong();renderLanes();renderMemory();renderBatch();renderLibrary();renderReference();drawTimeline();window.BeatforgePro?.refresh?.();}
+function renderSong(){if(!song)return;let cfg=GENRES[song.genre],dur=durationSec(song);$('songName').textContent=(song.title?('♫ '+song.title+' · '):'')+cfg.name+' / '+PITCH_NAMES[song.root]+' '+song.scale.toUpperCase()+' · #'+song.id.slice(-4).toUpperCase();$('songSummary').textContent='Generativ komponiert · '+new Date(song.createdAt).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' · Seed '+song.seed;$('timeDisplay').textContent='00:00 / '+timeString(dur);$('metaChips').innerHTML='';[song.bpm+' BPM',song.bars+' Takte',song.events.filter(e=>e.lane==='melody').length+' Melodienoten',song.events.length+' Events',song.progression.map(d=>['I','II','III','IV','V','VI','VII'][d]).join(' – ')].forEach(c=>{let el=document.createElement('span');el.className='chip';el.textContent=c;$('metaChips').appendChild(el)});$('learningBadge').textContent=song.rated===1?'POSITIV':song.rated===-1?'NEGATIV':song.biasUsed?'ADAPTIV':'NEU';$('learningBadge').classList.toggle('off',song.rated!==1&& !song.biasUsed);$('save').textContent=state.library.some(t=>t.id===song.id)?'♥ Gespeichert':'♡ Speichern';}
 function renderLanes(){if(!song)return;const total=song.bars;selectedBar=clamp(selectedBar,0,total-1);$('barSelect').innerHTML='';for(let b=0;b<total;b++){let btn=document.createElement('button');btn.textContent=b+1;btn.className=selectedBar===b?'active':'';btn.onclick=()=>{selectedBar=b;renderLanes()};$('barSelect').appendChild(btn)}$('lanes').innerHTML='';
  for(let lane of LANES){let parent=document.createElement('div');parent.className='lane';let name=document.createElement('div');name.className='lane-label';name.innerHTML='<span class="lane-color" style="background:'+lane.color+'"></span>'+lane.name;parent.appendChild(name);let steps=document.createElement('div');steps.className='steps';for(let st=0;st<16;st++){let current=selectedBar*16+st;let notes=song.events.filter(e=>e.lane===lane.id&&e.start>=current&&e.start<current+1);let active=notes.length>0;let bt=document.createElement('button');bt.className='step'+(active?' on':'');bt.style.setProperty('--step-color',lane.color);bt.title=lane.name+' · Takt '+(selectedBar+1)+' · Step '+(st+1)+(active?' · '+notes.length+' Noten':'');bt.setAttribute('aria-label',bt.title);if(DRUMS.includes(lane.id)){bt.onclick=()=>{let n=song.events.filter(e=>e.lane===lane.id&&e.start===current);if(n.length)song.events=song.events.filter(e=>!(e.lane===lane.id&&e.start>=current&&e.start<current+1));else song.events.push(event(lane.id,current,lane.id==='openhat'?.7:.3,({kick:36,snare:38,hat:42,openhat:46})[lane.id],.7));song.events.sort((a,b)=>a.start-b.start);song.rated=0;state.ratings=state.ratings.filter(v=>v.id!==song.id);renderAll()}}
  else{bt.onclick=()=>notify('Melodie/Akkorde kannst du nach MIDI-Export in deiner DAW bearbeiten.');}steps.appendChild(bt)}parent.appendChild(steps);$('lanes').appendChild(parent)} }
@@ -364,20 +367,48 @@ function updateRanges(){for(let k of ['energy','complexity','influence'])$(k+'Ou
 // Web Audio synthesis. Compatible with real-time and offline contexts.
 const noiseCache=new WeakMap();
 function noiseBuffer(ctx){if(noiseCache.has(ctx))return noiseCache.get(ctx);let b=ctx.createBuffer(1,Math.round(ctx.sampleRate*.65),ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;noiseCache.set(ctx,b);return b}
-function outputBus(ctx){let bus=ctx.createGain();bus.gain.value=.72;let compressor=ctx.createDynamicsCompressor();compressor.threshold.value=-17;compressor.knee.value=16;compressor.ratio.value=3;compressor.attack.value=.004;compressor.release.value=.22;bus.connect(compressor);compressor.connect(ctx.destination);return bus}
+function outputBus(ctx,s){let bus=ctx.createGain();bus.gain.value=clamp(Number(s?.mix?.master??.85),0,1.25)*.72;let compressor=ctx.createDynamicsCompressor();compressor.threshold.value=-17;compressor.knee.value=16;compressor.ratio.value=3;compressor.attack.value=.004;compressor.release.value=.22;bus.connect(compressor);compressor.connect(ctx.destination);return bus}
 function makeOsc(ctx,type,frequency,t,d,vol,output,lowpass=0,slide=0){let osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=type;osc.frequency.setValueAtTime(Math.max(25,frequency),t);if(slide)osc.frequency.exponentialRampToValueAtTime(Math.max(25,frequency*slide),t+Math.min(d*.5,.15));gain.gain.setValueAtTime(.0001,t);gain.gain.linearRampToValueAtTime(Math.max(.0002,vol),t+.009);gain.gain.exponentialRampToValueAtTime(.0001,t+Math.max(.06,d));if(lowpass){let filt=ctx.createBiquadFilter();filt.type='lowpass';filt.frequency.value=lowpass;osc.connect(filt);filt.connect(gain)}else osc.connect(gain);gain.connect(output);osc.start(t);osc.stop(t+Math.max(.08,d)+.015)}
 function makeNoise(ctx,t,d,vol,output,filter='highpass',freq=6000){const src=ctx.createBufferSource(),f=ctx.createBiquadFilter(),gain=ctx.createGain();src.buffer=noiseBuffer(ctx);f.type=filter;f.frequency.value=freq;gain.gain.setValueAtTime(Math.max(.0002,vol),t);gain.gain.exponentialRampToValueAtTime(.0001,t+Math.max(.025,d));src.connect(f);f.connect(gain);gain.connect(output);src.start(t);src.stop(t+Math.min(.63,d)+.01)}
-function synth(ctx,s,offset=0,bus=null){bus=bus||outputBus(ctx);let step=toSec(s),swing=GENRES[s.genre].swing,notes=s.events;
- for(const e of notes){let pos=e.start,t=offset+pos*step+(Math.floor(pos)%2===1?step*swing:0),dur=clamp(e.dur*step,.03,3),v=e.vel,pitch=e.pitch,freq=440*Math.pow(2,(pitch-69)/12);
-  if(t<0)continue;
-  if(e.lane==='melody'){makeOsc(ctx,s.genre==='rage'?'sawtooth':'triangle',freq,t,dur*.9,v*.14,bus,s.genre==='rage'?3200:2400);makeOsc(ctx,'sine',freq*2,t,dur*.7,v*.055,bus)}
-  else if(e.lane==='chords'){makeOsc(ctx,s.genre==='rage'?'sawtooth':'triangle',freq,t,dur,v*.065,bus,1600)}
-  else if(e.lane==='bass'){makeOsc(ctx,'sine',freq,t,Math.min(2,dur*1.4),v*.51,bus,320,0.94);makeOsc(ctx,'triangle',freq,t,dur,v*.065,bus,450)}
-  else if(e.lane==='kick'){makeOsc(ctx,'sine',145,t,.17,v*.75,bus,0,.29);makeNoise(ctx,t,.028,v*.13,bus,'lowpass',950)}
-  else if(e.lane==='snare'){makeNoise(ctx,t,.16,v*.24,bus,'highpass',1000);makeOsc(ctx,'triangle',190,t,.10,v*.16,bus)}
-  else if(e.lane==='hat')makeNoise(ctx,t,.06,v*.12,bus,'highpass',7600);
-  else if(e.lane==='openhat')makeNoise(ctx,t,.26,v*.19,bus,'highpass',6800);
+// Independent gain/solo/mute routing works both in real-time and in offline stem rendering.
+let activeMixNodes=null;
+function mixSettings(s){let m=s.mix||{};let anySolo=LANES.some(l=>m[l.id]?.solo);return {m,anySolo};}
+function updateLiveMix(s){if(!activeMixNodes||!audioCtx||audioCtx.state==='closed')return;const {m,anySolo}=mixSettings(s);const now=audioCtx.currentTime;
+ for(const lane of LANES){const setting=m[lane.id]||{},audible=!setting.mute&&(!anySolo||setting.solo);const vol=clamp(Number(setting.volume??1),0,1.5);activeMixNodes.lanes[lane.id]?.gain.setTargetAtTime(audible?vol:0,now,.015)}
+ activeMixNodes.master?.gain.setTargetAtTime(clamp(Number(m.master??.85),0,1.25)*.72,now,.015);
+}
+function synth(ctx,s,offset=0,bus=null){
+ bus=bus||outputBus(ctx,s);const {m,anySolo}=mixSettings(s),channels={};
+ const isLive=ctx===audioCtx && typeof ctx.createStereoPanner==='function';
+ for(const lane of LANES){const setting=m[lane.id]||{},gain=ctx.createGain(),volume=clamp(Number(setting.volume??1),0,1.5),audible=!setting.mute&&(!anySolo||setting.solo);
+  gain.gain.value=audible?volume:0;
+  if(ctx.createStereoPanner){const pan=ctx.createStereoPanner();pan.pan.value=clamp(Number(setting.pan??0),-1,1);gain.connect(pan);pan.connect(bus)}else gain.connect(bus);
+  channels[lane.id]=gain;
  }
+ if(isLive)activeMixNodes={lanes:channels,master:bus,context:ctx};
+ let step=toSec(s),swing=GENRES[s.genre].swing,notes=s.events;
+ for(const e of notes){let pos=e.start,t=offset+pos*step+(Math.floor(pos)%2===1?step*swing:0),dur=clamp(e.dur*step,.03,3),v=e.vel,pitch=e.pitch,freq=440*Math.pow(2,(pitch-69)/12),out=channels[e.lane]||bus;
+  if(t<0)continue;
+  if(e.lane==='melody'){
+   const tone=m.melodyTone||'soft';
+   if(tone==='pluck')makeOsc(ctx,'triangle',freq,t,Math.min(.32,dur*.7),v*.26,out,2900);
+   else if(tone==='bright')makeOsc(ctx,'sawtooth',freq,t,dur*.85,v*.18,out,5000);
+   else if(tone==='warm')makeOsc(ctx,'sine',freq,t,dur*1.25,v*.24,out,1200);
+   else makeOsc(ctx,s.genre==='rage'?'sawtooth':'triangle',freq,t,dur*.9,v*.19,out,s.genre==='rage'?3200:2400);
+   if(tone!=='pluck')makeOsc(ctx,'sine',freq*2,t,dur*.7,v*.045,out);
+  }
+  else if(e.lane==='chords')makeOsc(ctx,s.genre==='rage'?'sawtooth':'triangle',freq,t,dur,v*.065,out,1600);
+  else if(e.lane==='bass'){
+   const tone=m.bassTone||'deep';
+   makeOsc(ctx,tone==='dirty'?'sawtooth':'sine',freq,t,Math.min(2,dur*1.4),v*(tone==='dirty'?.14:.51),out,tone==='dirty'?360:320,tone==='punch'?.75:.94);
+   makeOsc(ctx,'triangle',freq,t,dur,v*(tone==='punch'?.14:.065),out,450);
+  }
+  else if(e.lane==='kick'){makeOsc(ctx,'sine',145,t,.17,v*.75,out,0,.29);makeNoise(ctx,t,.028,v*.13,out,'lowpass',950)}
+  else if(e.lane==='snare'){makeNoise(ctx,t,.16,v*.24,out,'highpass',1000);makeOsc(ctx,'triangle',190,t,.10,v*.16,out)}
+  else if(e.lane==='hat')makeNoise(ctx,t,.06,v*.12,out,'highpass',7600);
+  else if(e.lane==='openhat')makeNoise(ctx,t,.26,v*.19,out,'highpass',6800);
+ }
+ return channels;
 }
 // Safari requires audio nodes to be started within the synchronous user gesture.
 // Never await AudioContext.resume() before creating/scheduling the sound sources.
@@ -470,6 +501,7 @@ function testSound(){
  }catch(e){setAudioStatus('Testton-Fehler: '+e.message,true)}
 }
 function stopPlayback(){
+ activeMixNodes=null;
  ++playbackSequence;
  playing=false;
  clearPlaybackTimers();
@@ -641,6 +673,7 @@ window.Beatforge={getSong:()=>deepClone(song),getState:()=>deepClone(state),gene
 })();
 
 </script>
+<script src="./producer.js"></script>
 <script>
 if ('serviceWorker' in navigator && location.protocol==='https:') {
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
