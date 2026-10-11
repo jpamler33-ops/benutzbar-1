@@ -120,13 +120,16 @@ select,input[type=number],input[type=text]{min-height:49px;border:1px solid #383
 
 </style>
 <link rel="stylesheet" href="./producer.css" />
+<link rel="stylesheet" href="./audio-learning.css" />
+
+
 <link rel="manifest" href="./manifest.webmanifest" />
 <link rel="apple-touch-icon" href="./icon-180.png" />
 </head>
 <body>
 <div class="shell">
-<header class="top"><div class="identity"><div class="brand-mark">≋</div><div><div class="brand-name">BEATFORGE <span class="version">/ PRODUCER</span></div><div class="eyebrow">Adaptive music engine · Local-first</div></div></div><div class="header-meta"><span class="tag"><span class="dot"></span> Offline Engine</span><span class="tag">v2.0 · Producer</span></div></header>
-<section class="hero"><div><div class="eyebrow" style="margin-bottom:7px">GENERATE · LISTEN · LEARN · EXPORT</div><h1>Ideen werden zu <span>Tracks.</span></h1><p>Melodien, Akkorde, 808s und Drums automatisch erzeugen. Bewerte die besten Beats – die Engine passt ihre nächste Generation daran an.</p></div><div class="hero-stats"><div class="stat"><strong id="generatedCount">0</strong><small>Tracks erzeugt</small></div><div class="stat"><strong id="likedCount">0</strong><small>Gute Beispiele</small></div><div class="stat"><strong id="referenceCount">0</strong><small>MIDI-Referenzen</small></div></div></section>
+<header class="top"><div class="identity"><div class="brand-mark">≋</div><div><div class="brand-name">BEATFORGE <span class="version">/ PRODUCER</span></div><div class="eyebrow">Adaptive music engine · Local-first</div></div></div><div class="header-meta"><span class="tag"><span class="dot"></span> Offline Engine</span><span class="tag">v3.0 · Audio Learn</span></div></header>
+<section class="hero"><div><div class="eyebrow" style="margin-bottom:7px">GENERATE · LISTEN · LEARN · EXPORT</div><h1>Ideen werden zu <span>Tracks.</span></h1><p>Melodien, Akkorde, 808s und Drums automatisch erzeugen. Bewerte die besten Beats – die Engine passt ihre nächste Generation daran an.</p></div><div class="hero-stats"><div class="stat"><strong id="generatedCount">0</strong><small>Tracks erzeugt</small></div><div class="stat"><strong id="likedCount">0</strong><small>Gute Beispiele</small></div><div class="stat"><strong id="referenceCount">0</strong><small>Referenzen</small></div></div></section>
 <div class="layout">
 <aside class="column">
 <section class="panel"><div class="panel-title"><h2>01 / Generation</h2><small>Kompositionsparameter</small></div>
@@ -137,7 +140,7 @@ select,input[type=number],input[type=text]{min-height:49px;border:1px solid #383
 <div class="field"><label for="complexity">Komplexität <span class="soft">simpler → busy</span></label><div class="range-line"><input id="complexity" type="range" min="0" max="100" value="55" /><output id="complexityOut">55%</output></div></div>
 <div class="field"><label for="influence">Lern-Einfluss <span class="soft">neu → vertraut</span></label><div class="range-line"><input id="influence" type="range" min="0" max="100" value="60" /><output id="influenceOut">60%</output></div><div class="slider-description">Beeinflusst Stilmerkmale, keine Kopie fertiger Tracks.</div></div>
 <div class="stack" style="margin-top:20px"><button id="generate" class="btn btn-primary" style="min-height:50px;font-size:14px">✦ Neuen Beat generieren</button><div class="action-row"><button id="variant" class="btn btn-outline">↝ Variation</button><button id="surprise" class="btn btn-outline">⤨ Zufall</button></div><button id="batchGenerate" class="btn btn-outline">⚡ Auto-Lab · 12 Beats erzeugen</button></div></section>
-<section class="panel"><div class="panel-title"><h2>02 / Audio-Export</h2><small>DAW-ready</small></div><p class="subtle" style="margin-top:-9px">MIDI für FL Studio, Ableton, Logic und WAV als Vorschau. Export enthält alle Spuren.</p><div class="stack"><button id="exportMidi" class="btn">⇩ MIDI · einzelne Spuren</button><button id="exportWav" class="btn btn-outline">⇩ WAV · Audiomix</button><button id="exportJson" class="btn btn-outline">⇩ Projekt · JSON</button></div><div class="license-note" style="margin-top:12px">Die Audioausgabe verwendet synthetische Demo-Instrumente, keine professionellen Sample-Libraries.</div></section>
+<section class="panel"><div class="panel-title"><h2>02 / Audio-Export</h2><small>DAW-ready</small></div><p class="subtle" style="margin-top:-9px">MIDI für FL Studio, Ableton, Logic und WAV als Vorschau. Mit eigenen Audio-Beats lernt der Generator Rhythmus-Merkmale.</p><div class="stack"><button id="exportMidi" class="btn">⇩ MIDI · einzelne Spuren</button><button id="exportWav" class="btn btn-outline">⇩ WAV · Audiomix</button><button id="exportJson" class="btn btn-outline">⇩ Projekt · JSON</button></div><div class="license-note" style="margin-top:12px">Die Audioausgabe verwendet synthetische Demo-Instrumente, keine professionellen Sample-Libraries.</div></section>
 </aside>
 <main class="column">
 <section class="panel"><div class="track-title"><div><div class="eyebrow" style="margin-bottom:6px">AKTUELLER ENTWURF</div><h2 id="songName">—</h2><p id="songSummary">Noch kein Beat erzeugt</p></div><span id="learningBadge" class="pill off">NO DATA</span></div>
@@ -149,7 +152,7 @@ select,input[type=number],input[type=text]{min-height:49px;border:1px solid #383
 </main>
 <aside class="column right">
 <section class="panel"><div class="panel-title"><h2>04 / Adaptive Engine</h2><small>Bewertungen</small></div><div class="score"><div><div class="eyebrow">LERNBEISPIELE</div><div class="score-number" id="samples">0</div></div><div style="text-align:right"><div class="eyebrow">GENRE-MEMORY</div><strong id="genreMemory" style="font-size:15px">0 Beats</strong></div></div><div class="progress"><div id="learningBar" style="width:0%"></div></div><div id="learningInfo" class="insight">Noch kein Feedback. Generiere und bewerte Beats, damit die Engine deinen Geschmack modelliert.</div><div class="separator"></div><div class="minititle">DIESEN BEAT BEWERTEN</div><div class="feedback"><button id="like" class="btn btn-green">♡ Gefällt mir</button><button id="dislike" class="btn btn-outline">× Nicht meins</button></div><div class="hint">Bewertungen gewichten Tonfolgen, Groove, Dichte, Akkordtypen und Tempo. Schlechte Beispiele werden abgeschwächt.</div></section>
-<section class="panel"><div class="panel-title"><h2>05 / Aus eigenen Songs lernen</h2><small>.MID / .MIDI</small></div><div class="import-zone"><div style="font-size:22px">♬</div><strong style="font-size:12px">MIDI als Referenz analysieren</strong><p>Liest Noten, Rhythmus, Register und Tempo aus einer eigenen oder lizenzierten MIDI-Datei.</p><button id="importButton" class="btn btn-outline" style="font-size:11px">Datei auswählen</button><input id="midiInput" type="file" accept=".mid,.midi,audio/midi" class="hidden" /></div><div class="separator"></div><div id="referenceList" class="tracklist-scroll"><div class="subtle">Noch keine MIDI-Referenzen.</div></div><p class="license-note" style="margin-top:8px">Keine MP3/WAV-Analyse und kein neuronales Modell in dieser Version. Keine fremden geschützten Aufnahmen ohne Rechte zum Training verwenden.</p></section>
+<section class="panel"><div class="panel-title"><h2>05 / Aus eigenen Songs lernen</h2><small>.MID / .MIDI</small></div><div class="import-zone"><div style="font-size:22px">♬</div><strong style="font-size:12px">MIDI als Referenz analysieren</strong><p>Liest Noten, Rhythmus, Register und Tempo aus einer eigenen oder lizenzierten MIDI-Datei.</p><button id="importButton" class="btn btn-outline" style="font-size:11px">Datei auswählen</button><input id="midiInput" type="file" accept=".mid,.midi,audio/midi" class="hidden" /></div><div class="separator"></div><div id="referenceList" class="tracklist-scroll"><div class="subtle">Noch keine MIDI-Referenzen.</div></div><p class="license-note" style="margin-top:8px">Audio-Referenzen analysieren Groove und Klangmerkmale lokal. Kein neuronales Audiomodell; keine Melodie-Transkription. Nur eigene oder zur Analyse freigegebene Aufnahmen verwenden.</p></section>
 <section class="panel"><div class="panel-title"><h2>06 / Training & Daten</h2><small>lokal</small></div><div class="info-line"><span>Persistenz</span><strong>Browser / localStorage</strong></div><div class="info-line"><span>Modelltyp</span><strong>Adaptiver Generator</strong></div><div class="info-line"><span>Cloud-Kosten</span><strong>0 €</strong></div><div class="info-line"><span>Datentransfer</span><strong>Keiner</strong></div><div class="stack" style="margin-top:12px"><button id="exportTraining" class="btn btn-outline">⇩ Trainingsdaten sichern</button><button id="importTraining" class="btn btn-outline">⇧ Trainingsdaten laden</button><input id="trainingInput" type="file" accept=".json,application/json" class="hidden" /><button id="resetTraining" class="btn" style="border-color:#573c4d;color:#e4a1b1">Lernspeicher zurücksetzen</button></div></section>
 </aside>
 </div><div class="footer">BEATFORGE / ADAPTIVE LAB · Experimental Prototyp · Keine kommerzielle Klangqualität oder Rechteprüfung garantiert</div>
@@ -174,7 +177,7 @@ const LANES = [
  {id:'kick',name:'Kick',color:'#ffbf70'}, {id:'snare',name:'Snare',color:'#ff7898'}, {id:'hat',name:'Hi-Hat',color:'#a3acba'}, {id:'openhat',name:'Open Hat',color:'#ffe38c'}
 ];
 const DRUMS = ['kick','snare','hat','openhat'];
-let state={generated:0,ratings:[],references:[],library:[],history:[],version:1};
+let state={generated:0,ratings:[],references:[],audioRefs:[],library:[],history:[],version:1};
 let song=null, playing=false,audioCtx=null,playStart=0,loopTimer=null,stopTimer=null,animId=null,selectedBar=0, variationOf=null,batchCandidates=[];
 function clamp(v,a,b){return Math.min(b,Math.max(a,v))}
 function rint(r,a,b){return a+Math.floor(r()*(b-a+1))}
@@ -183,7 +186,17 @@ function randomSeed(){return Math.floor(Math.random()*4294967295)>>>0}
 function rng(seed){let a=seed>>>0;return function(){a+=0x6D2B79F5;let t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
 function weighted(r,arr,weights){let z=weights.reduce((a,b)=>a+Math.max(0,b),0);if(!z)return choose(r,arr);let x=r()*z;for(let i=0;i<arr.length;i++){x-=Math.max(0,weights[i]);if(x<=0)return arr[i]}return arr.at(-1)}
 function deepClone(a){return JSON.parse(JSON.stringify(a))}
-function ensureState(){try{let raw=localStorage.getItem(MEMORY_KEY);if(raw){let parsed=JSON.parse(raw);if(parsed&&parsed.version===1){state={...state,...parsed};if(!Array.isArray(state.history))state.history=[]}}}catch(e){notify('Gespeicherte Daten konnten nicht gelesen werden.')}}
+function sanitizeAudioRefs(rows){
+ if(!Array.isArray(rows))return [];
+ return rows.slice(-20).filter(x=>{
+  if(!x||typeof x!=='object'||!GENRES[x.genre]||!x.profile||typeof x.profile!=='object')return false;
+  const p=x.profile;
+  return Number.isFinite(p.bpm)&&p.bpm>=55&&p.bpm<=220&&Number.isFinite(p.confidence)&&p.confidence>=0&&p.confidence<=1
+   &&p.groove&&['kick','snare','hat','openhat'].every(k=>Array.isArray(p.groove[k])&&p.groove[k].length===16&&p.groove[k].every(n=>Number.isFinite(n)&&n>=0&&n<=1));
+ }).map(x=>({id:String(x.id||'audio').slice(0,64),name:String(x.name||'Beat').slice(0,100),genre:x.genre,enabled:x.enabled!==false,
+  weight:clamp(Math.round(Number(x.weight)||1),1,3),createdAt:Number(x.createdAt)||Date.now(),source:'audio-profile',profile:x.profile}));
+}
+function ensureState(){try{let raw=localStorage.getItem(MEMORY_KEY);if(raw){let parsed=JSON.parse(raw);if(parsed&&parsed.version===1){state={...state,...parsed};if(!Array.isArray(state.history))state.history=[];state.audioRefs=sanitizeAudioRefs(state.audioRefs)}}}catch(e){notify('Gespeicherte Daten konnten nicht gelesen werden.')}}
 function persist(){try{localStorage.setItem(MEMORY_KEY,JSON.stringify(state))}catch(e){state.history=state.history.slice(-80);state.library=state.library.slice(-12);try{localStorage.setItem(MEMORY_KEY,JSON.stringify(state))}catch(_){notify('Speicher voll: bitte Trainingsdaten exportieren.')}}}
 function notify(message){const t=$('toast');t.textContent=message;t.classList.remove('hidden');clearTimeout(notify.t);notify.t=setTimeout(()=>t.classList.add('hidden'),3400)}
 function noteName(m){return PITCH_NAMES[(m%12+12)%12]+(Math.floor(m/12)-1)}
@@ -197,6 +210,42 @@ function featuresOf(s){
 }
 function positiveExamples(genre){return [...state.ratings.filter(e=>e.rating===1),...state.references.map(e=>({...e,rating:1}))].filter(e=>e.features&&e.features.genre===genre)}
 function negativeExamples(genre){return state.ratings.filter(e=>e.rating===-1&&e.features&&e.features.genre===genre)}
+// Extracted audio reference profiles, NOT samples. Groove learning is isolated from
+// melody/harmony conditioning because polyphonic audio cannot reliably reveal MIDI notes.
+function learnAudioGroove(genre,influence,r){
+ if(influence<=0)return null;
+ const list=(state.audioRefs||[]).filter(v=>v.genre===genre&&v.enabled!==false&&v.profile?.groove&&v.profile?.confidence>=.18);
+ if(!list.length)return null;
+ const picked=weighted(r,list,list.map(v=>Math.max(.1,(v.weight||1)*v.profile.confidence)));
+ const strength=clamp(influence*picked.profile.confidence,0,1);
+ return {...picked.profile,strength,referenceId:picked.id};
+}
+function applyAudioDrums(s,r,profile,b){
+ const cfg=GENRES[s.genre],e=s.energy/100,complexity=s.complexity/100;
+ const baselines={
+  trap:{kick:[0,6,10,14],snare:[8],hat:[0,2,4,6,8,10,12,14]},
+  drill:{kick:[0,3,7,11,14],snare:[8],hat:[0,2,4,6,8,10,12,14]},
+  rage:{kick:[0,6,10,14],snare:[8],hat:Array.from({length:16},(_,i)=>i)},
+  pluggnb:{kick:[0,6,10,14],snare:[8],hat:[0,2,4,6,8,10,12,14]},
+  rnb:{kick:[0,7,11],snare:[8],hat:[0,4,6,8,12,14]},
+  house:{kick:[0,4,8,12],snare:[4,12],hat:[2,6,10,14]},
+  boom:{kick:[0,6,10],snare:[4,12],hat:[0,2,4,6,8,10,12,14]}
+ };
+ const base=baselines[s.genre]||baselines.trap;
+ for(const lane of ['kick','snare','hat']){
+  const learned=profile.groove[lane]||Array(16).fill(0);
+  for(let st=0;st<16;st++){
+   const p0=base[lane].includes(st)?(lane==='hat'?.81:.83):(lane==='hat'?.035:.045);
+   const learnedP=clamp(Number(learned[st])||0,0,1);
+   const probability=p0*(1-profile.strength)+learnedP*profile.strength;
+   if(r()<probability){const pitch={kick:36,snare:38,hat:42}[lane];
+    s.events.push(event(lane,b*16+st,lane==='hat'?.24:.7,pitch,clamp(.52+e*.28+r()*.14,.1,1)));}
+  }
+ }
+ const oh=profile.groove.openhat||[];
+ for(let st=0;st<16;st++)if(r()<clamp((Number(oh[st])||0)*profile.strength*.35,0,.3))s.events.push(event('openhat',b*16+st,.65,46,.36+e*.17));
+}
+
 function learnBias(genre, influence, r){
  const liked=positiveExamples(genre), disliked=negativeExamples(genre);
  if(!liked.length||r()>influence)return null;
@@ -227,6 +276,8 @@ function configFromUI(){return {genre:$('genre').value,root:+$('key').value,scal
 function getBarChord(root,scale,progression,b){let d=progression[b%progression.length];return [degreeMidi(root,scale,d,0),degreeMidi(root,scale,d+2,0),degreeMidi(root,scale,d+4,0)]}
 function fillNotes(s,r,bias,parts=['melody','chords','bass','drums']){
  const scale=SCALES[s.scale]||SCALES.minor, density=s.complexity/100,energy=s.energy/100, cfg=GENRES[s.genre],numberOfBars=s.bars;
+ const audioBias=learnAudioGroove(s.genre,s.influence,r);
+ if(audioBias&&parts.includes('drums')){s.audioStyleRef=audioBias.referenceId;s.audioStyleStrength=+audioBias.strength.toFixed(3)}
  if(parts.includes('chords')){
   for(let b=0;b<numberOfBars;b++){
    let chord=getBarChord(s.root,scale,s.progression,b);
@@ -273,6 +324,7 @@ function fillNotes(s,r,bias,parts=['melody','chords','bass','drums']){
  }
  if(parts.includes('drums')){
   for(let b=0;b<numberOfBars;b++){
+   if(audioBias){applyAudioDrums(s,r,audioBias,b);continue;}
    let start=b*16;let kicks=[],snares=[],hats=[],oh=[];
    if(s.genre==='house') {kicks=[0,4,8,12];snares=[4,12];hats=[2,6,10,14]}
    else if(s.genre==='boom'){kicks=[0,6,10];snares=[4,12];hats=[0,2,4,6,8,10,12,14]}
@@ -296,6 +348,12 @@ function fillNotes(s,r,bias,parts=['melody','chords','bass','drums']){
 }
 function buildSong(overrides={},regenPart=null){
  const opt={...configFromUI(),...overrides};let r=rng(opt.seed??randomSeed()),seed=opt.seed??randomSeed();r=rng(seed);
+ // Explicit opt-in: learned reliable BPM can replace UI tempo. The slider still
+ // controls rhythmic influence; user can disable tempo matching independently.
+ if(document.getElementById('audioMatchTempo')?.checked&&!Object.hasOwn(overrides,'bpm')){
+  const audio=learnAudioGroove(opt.genre,opt.influence,r);
+  if(audio&&audio.confidence>=.45&&audio.strength>=.20)opt.bpm=clamp(Math.round(audio.bpm),55,220);
+ }
  const bias=learnBias(opt.genre,opt.influence,r);
  let s={id:Date.now().toString(36)+'-'+Math.floor(r()*1e6).toString(36),seed,genre:opt.genre,root:opt.root,scale:opt.scale,bpm:opt.bpm,bars:opt.bars,energy:opt.energy,complexity:opt.complexity,influence:opt.influence,progression:bias&&r()<opt.influence*.75?bias.progression.slice():chooseProgression(r,opt.genre),events:[],createdAt:Date.now(),rated:0,biasUsed:!!bias};
  fillNotes(s,r,bias);return s;
@@ -352,13 +410,13 @@ function onRate(rating){if(!song)return;if(song.rated===rating){notify('Dieser B
 function toSec(s){return 60/s.bpm/4}
 function durationSec(s){return s.bars*16*toSec(s)}
 function timeString(n){n=Math.floor(Math.max(0,n));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
-function renderAll(){renderSong();renderLanes();renderMemory();renderBatch();renderLibrary();renderReference();drawTimeline();window.BeatforgePro?.refresh?.();}
+function renderAll(){renderSong();renderLanes();renderMemory();renderBatch();renderLibrary();renderReference();drawTimeline();window.BeatforgePro?.refresh?.();window.BeatforgeAudioLearn?.refresh?.();}
 function renderSong(){if(!song)return;let cfg=GENRES[song.genre],dur=durationSec(song);$('songName').textContent=(song.title?('♫ '+song.title+' · '):'')+cfg.name+' / '+PITCH_NAMES[song.root]+' '+song.scale.toUpperCase()+' · #'+song.id.slice(-4).toUpperCase();$('songSummary').textContent='Generativ komponiert · '+new Date(song.createdAt).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' · Seed '+song.seed;$('timeDisplay').textContent='00:00 / '+timeString(dur);$('metaChips').innerHTML='';[song.bpm+' BPM',song.bars+' Takte',song.events.filter(e=>e.lane==='melody').length+' Melodienoten',song.events.length+' Events',song.progression.map(d=>['I','II','III','IV','V','VI','VII'][d]).join(' – ')].forEach(c=>{let el=document.createElement('span');el.className='chip';el.textContent=c;$('metaChips').appendChild(el)});$('learningBadge').textContent=song.rated===1?'POSITIV':song.rated===-1?'NEGATIV':song.biasUsed?'ADAPTIV':'NEU';$('learningBadge').classList.toggle('off',song.rated!==1&& !song.biasUsed);$('save').textContent=state.library.some(t=>t.id===song.id)?'♥ Gespeichert':'♡ Speichern';}
 function renderLanes(){if(!song)return;const total=song.bars;selectedBar=clamp(selectedBar,0,total-1);$('barSelect').innerHTML='';for(let b=0;b<total;b++){let btn=document.createElement('button');btn.textContent=b+1;btn.className=selectedBar===b?'active':'';btn.onclick=()=>{selectedBar=b;renderLanes()};$('barSelect').appendChild(btn)}$('lanes').innerHTML='';
  for(let lane of LANES){let parent=document.createElement('div');parent.className='lane';let name=document.createElement('div');name.className='lane-label';name.innerHTML='<span class="lane-color" style="background:'+lane.color+'"></span>'+lane.name;parent.appendChild(name);let steps=document.createElement('div');steps.className='steps';for(let st=0;st<16;st++){let current=selectedBar*16+st;let notes=song.events.filter(e=>e.lane===lane.id&&e.start>=current&&e.start<current+1);let active=notes.length>0;let bt=document.createElement('button');bt.className='step'+(active?' on':'');bt.style.setProperty('--step-color',lane.color);bt.title=lane.name+' · Takt '+(selectedBar+1)+' · Step '+(st+1)+(active?' · '+notes.length+' Noten':'');bt.setAttribute('aria-label',bt.title);if(DRUMS.includes(lane.id)){bt.onclick=()=>{let n=song.events.filter(e=>e.lane===lane.id&&e.start===current);if(n.length)song.events=song.events.filter(e=>!(e.lane===lane.id&&e.start>=current&&e.start<current+1));else song.events.push(event(lane.id,current,lane.id==='openhat'?.7:.3,({kick:36,snare:38,hat:42,openhat:46})[lane.id],.7));song.events.sort((a,b)=>a.start-b.start);song.rated=0;state.ratings=state.ratings.filter(v=>v.id!==song.id);renderAll()}}
  else{bt.onclick=()=>notify('Melodie/Akkorde kannst du nach MIDI-Export in deiner DAW bearbeiten.');}steps.appendChild(bt)}parent.appendChild(steps);$('lanes').appendChild(parent)} }
 function drawTimeline(){if(!song)return;const canvas=$('timeline'),c=canvas.getContext('2d');const W=canvas.width,H=canvas.height;c.clearRect(0,0,W,H);c.fillStyle='#0d111b';c.fillRect(0,0,W,H);for(let b=0;b<=song.bars;b++){let x=b/song.bars*W;c.strokeStyle='#343b4e';c.beginPath();c.moveTo(x,20);c.lineTo(x,H);c.stroke();if(b<song.bars){c.fillStyle='#7682a2';c.font='10px system-ui';c.fillText('0'+(b+1),x+7,16)}}let tracks=['melody','chords','bass','kick','snare','hat','openhat'];for(let k=0;k<tracks.length;k++){let lane=LANES[k];let y=23+k*14;c.fillStyle='#232a37';c.fillRect(0,y+1,W,11);c.fillStyle=lane.color;let events=song.events.filter(e=>e.lane===tracks[k]);for(let e of events){let x=e.start/(song.bars*16)*W;let w=Math.max(2,e.dur/(song.bars*16)*W);let height=tracks[k]==='chords'?8:6;c.globalAlpha=.75;c.fillRect(x,y+1+Math.floor((11-height)/2),w,height);c.globalAlpha=1}}}
-function renderMemory(){let liked=state.ratings.filter(v=>v.rating===1);let examples=positiveExamples($('genre').value);$('generatedCount').textContent=state.generated;$('likedCount').textContent=liked.length;$('referenceCount').textContent=state.references.length;$('samples').textContent=liked.length+state.references.length;$('genreMemory').textContent=examples.length+' Beispiele';$('learningBar').style.width=(Math.min(100,examples.length*12))+'%';let neg=negativeExamples($('genre').value);let box=$('learningInfo');if(examples.length){let avg=examples.reduce((a,e)=>a+e.features.melDensity,0)/examples.length;let avgK=examples.reduce((a,e)=>a+e.features.kickDensity,0)/examples.length;box.textContent='Gelernt in '+GENRES[$('genre').value].name+': Ø '+avg.toFixed(1)+' Melodienoten/Takt, '+avgK.toFixed(1)+' Kicks/Takt. '+neg.length+' negative Beispiele. Die nächsten Generationen können diese Merkmale bevorzugen.'}else box.textContent='Für dieses Genre sind noch keine positiven Beispiele vorhanden. Bewerte Beats oder importiere MIDI-Referenzen.';}
+function renderMemory(){let liked=state.ratings.filter(v=>v.rating===1);let examples=positiveExamples($('genre').value);$('generatedCount').textContent=state.generated;$('likedCount').textContent=liked.length;$('referenceCount').textContent=state.references.length+(state.audioRefs?.length||0);$('samples').textContent=liked.length+state.references.length+(state.audioRefs?.length||0);$('genreMemory').textContent=(examples.length+(state.audioRefs||[]).filter(a=>a.genre===$('genre').value).length)+' Beispiele';$('learningBar').style.width=(Math.min(100,examples.length*12))+'%';let neg=negativeExamples($('genre').value);let box=$('learningInfo');if(examples.length){let avg=examples.reduce((a,e)=>a+e.features.melDensity,0)/examples.length;let avgK=examples.reduce((a,e)=>a+e.features.kickDensity,0)/examples.length;box.textContent='Gelernt in '+GENRES[$('genre').value].name+': Ø '+avg.toFixed(1)+' Melodienoten/Takt, '+avgK.toFixed(1)+' Kicks/Takt. '+neg.length+' negative Beispiele. Die nächsten Generationen können diese Merkmale bevorzugen.'}else box.textContent=(state.audioRefs||[]).some(v=>v.genre===$('genre').value)?'Audio-Stilprofile aktiv: Beim Generieren fließen Kick-, Snare- und Hi-Hat-Groove ein. Für Melodien und Akkorde kannst du MIDI-Referenzen oder Bewertungen ergänzen.':'Für dieses Genre sind noch keine positiven Beispiele vorhanden. Bewerte Beats oder importiere MIDI-/Audio-Referenzen.';}
 function renderLibrary(){let lib=$('library');$('libraryTotal').textContent=state.library.length+' Projekte';lib.innerHTML='';if(!state.library.length){lib.innerHTML='<div class="subtle">Noch keine gespeicherten Entwürfe.</div>';return}for(let saved of state.library.slice().reverse()){let row=document.createElement('div');row.className='record';let info=document.createElement('div');info.innerHTML='<div class="record-title"></div><div class="record-sub"></div>';info.children[0].textContent=GENRES[saved.genre]?.name+' · '+PITCH_NAMES[saved.root]+' · '+saved.bpm+' BPM';info.children[1].textContent=saved.events.length+' Noten/Schläge · '+new Date(saved.createdAt).toLocaleDateString('de-DE');let b=document.createElement('button');b.textContent='Öffnen';b.onclick=()=>{stopPlayback();song=deepClone(saved);selectedBar=0;renderAll();notify('Projekt geladen.')};row.append(info,b);lib.appendChild(row)}}
 function renderReference(){let el=$('referenceList');el.innerHTML='';if(!state.references.length){el.innerHTML='<div class="subtle">Noch keine MIDI-Referenzen.</div>';return}for(let ref of state.references.slice().reverse().slice(0,12)){let row=document.createElement('div');row.className='record';let info=document.createElement('div');info.style.minWidth='0';let nm=document.createElement('div');nm.className='record-title file-name';nm.textContent=ref.name;let sub=document.createElement('div');sub.className='record-sub';sub.textContent=GENRES[ref.features.genre]?.name+' · '+Math.round(ref.features.melDensity*10)/10+' Noten/Takt';info.append(nm,sub);let b=document.createElement('button');b.textContent='Entfernen';b.onclick=()=>{state.references=state.references.filter(x=>x.id!==ref.id);persist();renderAll()};row.append(info,b);el.appendChild(row)}}
 function saveSong(){if(!song)return;let idx=state.library.findIndex(v=>v.id===song.id);if(idx<0){state.library.push(deepClone(song));state.library=state.library.slice(-30);notify('Projekt lokal gespeichert.')}else{state.library.splice(idx,1);notify('Aus Favoriten entfernt.')}persist();renderAll()}
@@ -570,7 +628,7 @@ function analyzeMidi(parsed,genre){
 }
 
 async function importMIDI(file){if(!file)return;if(file.size>2*1024*1024)throw Error('Maximal 2 MB MIDI pro Datei');let p=parseMidi(await file.arrayBuffer()),f=analyzeMidi(p,$('genre').value);const id=Date.now().toString(36)+Math.random().toString(16).slice(2);state.references.push({id,name:file.name.slice(0,100),features:f,at:Date.now(),source:'midi'});state.references=state.references.slice(-60);persist();renderAll();notify('MIDI analysiert: '+p.notes.length+' Noten · '+f.bpm+' BPM. Als Stil-Referenz gespeichert.')}
-function loadTraining(file){if(!file)return;return file.text().then(raw=>{if(raw.length>5000000)throw Error('Datei zu groß');let d=JSON.parse(raw);if(d.version!==1||!Array.isArray(d.ratings)||!Array.isArray(d.references)||!Array.isArray(d.library)||!Array.isArray(d.history))throw Error('Ungültige Trainingsdatei');state={version:1,generated:clamp(+d.generated||0,0,1000000),ratings:d.ratings.slice(-500),references:d.references.slice(-60),library:d.library.slice(-30),history:d.history.slice(-150)};persist();renderAll();notify('Trainingsdaten geladen.')})}
+function loadTraining(file){if(!file)return;return file.text().then(raw=>{if(raw.length>5000000)throw Error('Datei zu groß');let d=JSON.parse(raw);if(d.version!==1||!Array.isArray(d.ratings)||!Array.isArray(d.references)||!Array.isArray(d.library)||!Array.isArray(d.history))throw Error('Ungültige Trainingsdatei');state={version:1,generated:clamp(+d.generated||0,0,1000000),ratings:d.ratings.slice(-500),references:d.references.slice(-60),audioRefs:sanitizeAudioRefs(d.audioRefs),library:d.library.slice(-30),history:d.history.slice(-150)};persist();renderAll();notify('Trainingsdaten geladen.')})}
 function bind(){
  $('genre').onchange=()=>applyGenre();for(let k of ['energy','complexity','influence'])$(k).oninput=updateRanges;
  $('generate').onclick=()=>updateSong('new');$('batchGenerate').onclick=batchGenerate;$('surprise').onclick=()=>updateSong('surprise');$('variant').onclick=()=>updateSong('variation');
@@ -581,7 +639,7 @@ function bind(){
  $('importButton').onclick=()=>$('midiInput').click();$('midiInput').onchange=async e=>{try{await importMIDI(e.target.files[0])}catch(ex){notify('MIDI-Fehler: '+ex.message)}finally{e.target.value=''}};
  $('exportTraining').onclick=()=>downloadBlob(JSON.stringify(state,null,2),'beatforge_training_'+Date.now()+'.json','application/json');
  $('importTraining').onclick=()=>$('trainingInput').click();$('trainingInput').onchange=async e=>{try{await loadTraining(e.target.files[0])}catch(ex){notify('Import fehlgeschlagen: '+ex.message)}finally{e.target.value=''}};
- $('resetTraining').onclick=()=>{if(!confirm('Alle Bewertungen, MIDI-Referenzen, Historie und Favoriten unwiderruflich löschen? Vorher Trainingsdaten exportieren!'))return;state={generated:0,ratings:[],references:[],library:[],history:[],version:1};persist();renderAll();notify('Lernspeicher zurückgesetzt.')};
+ $('resetTraining').onclick=()=>{if(!confirm('Alle Bewertungen, MIDI-Referenzen, Historie und Favoriten unwiderruflich löschen? Vorher Trainingsdaten exportieren!'))return;state={generated:0,ratings:[],references:[],audioRefs:[],library:[],history:[],version:1};persist();renderAll();notify('Lernspeicher zurückgesetzt.')};
  window.addEventListener('beforeunload',()=>stopPlayback());
 }
 ensureState();bind();updateRanges();updateSong('new');
@@ -674,6 +732,7 @@ window.Beatforge={getSong:()=>deepClone(song),getState:()=>deepClone(state),gene
 
 </script>
 <script src="./producer.js"></script>
+<script src="./audio-learning.js"></script>
 <script>
 if ('serviceWorker' in navigator && location.protocol==='https:') {
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
