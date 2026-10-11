@@ -121,8 +121,7 @@ select,input[type=number],input[type=text]{min-height:49px;border:1px solid #383
 </style>
 <link rel="stylesheet" href="./producer.css" />
 <link rel="stylesheet" href="./audio-learning.css" />
-
-
+<link rel="stylesheet" href="./groove-model.css" />
 <link rel="manifest" href="./manifest.webmanifest" />
 <link rel="apple-touch-icon" href="./icon-180.png" />
 </head>
@@ -325,6 +324,7 @@ function fillNotes(s,r,bias,parts=['melody','chords','bass','drums']){
  if(parts.includes('drums')){
   for(let b=0;b<numberOfBars;b++){
    if(audioBias){applyAudioDrums(s,r,audioBias,b);continue;}
+   if(window.BeatforgeGrooveModel?.apply(s,r,b))continue;
    let start=b*16;let kicks=[],snares=[],hats=[],oh=[];
    if(s.genre==='house') {kicks=[0,4,8,12];snares=[4,12];hats=[2,6,10,14]}
    else if(s.genre==='boom'){kicks=[0,6,10];snares=[4,12];hats=[0,2,4,6,8,10,12,14]}
@@ -733,6 +733,7 @@ window.Beatforge={getSong:()=>deepClone(song),getState:()=>deepClone(state),gene
 </script>
 <script src="./producer.js"></script>
 <script src="./audio-learning.js"></script>
+<script src="./groove-model.js"></script>
 <script>
 if ('serviceWorker' in navigator && location.protocol==='https:') {
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
