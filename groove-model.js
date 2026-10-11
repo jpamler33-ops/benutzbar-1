@@ -1,6 +1,6 @@
 'use strict';
 /* Small supervised groove model. Activates ONLY when a validated CC BY 4.0
- * model trained on actual WaivOps labels is available. No demo/fake training.
+ * model trained on actual GMD performances is available. No demo/fake training.
  */
 (()=>{
  const LANES=['kick','snare','hat','openhat'];
@@ -12,8 +12,8 @@
  try{let settings=JSON.parse(localStorage.getItem(KEY)||'null');if(['off','blend','strong'].includes(settings?.mode))mode=settings.mode}catch(e){}
  const $=id=>document.getElementById(id);
  const valid=(m)=>{
-  if(!m || m.schema!=='beatforge.waivops.rhythm-model.v1'||m.trained!==true||!m.data?.all||!Number.isInteger(m.meta?.samples_used)||m.meta.samples_used<20)return false;
-  if(m.meta.license!=='CC BY 4.0'||m.meta.doi!=='10.5281/zenodo.15734094')return false;
+  if(!m || m.schema!=='beatforge.gmd.rhythm-model.v1'||m.trained!==true||!m.data?.all||!Number.isInteger(m.meta?.samples_used)||m.meta.samples_used<20)return false;
+  if(m.meta.license!=='CC BY 4.0'||m.meta.archive_sha256!=='651cbc524ffb891be1a3e46d89dc82a1cecb09a57c748c7b45b844c4841dcc1e')return false;
   for(const group of Object.values(m.data)){
    if(!group||!Number.isFinite(group.samples)||group.samples<1)return false;
    for(const lane of LANES){
@@ -31,8 +31,8 @@
  function bucket(bpm){return bpm<135?'slow':bpm<160?'medium':'fast'}
  function apply(s,r,bar){
   if(!model||mode==='off'||!allowedGenres.has(s.genre)||!(s.influence>0))return false;
-  const g=model.data[bucket(s.bpm)]||model.data.all;
-  // The learned data covers Trap/Drill adjacent styles only. Melody/bass/chords
+  const g=model.data.hiphop||model.data[bucket(s.bpm)]||model.data.all;
+  // GMD hiphop rhythms are not Trap-specific. Melody/bass/chords
   // remain newly composed by the existing independent engine.
   const mix=clamp((mode==='strong'?.83:.55)*s.influence,0,.9);
   const barStart=bar*16;
@@ -62,18 +62,18 @@
     s.events.push({lane,start:barStart+st,dur:.70,pitch:pitch[lane],vel:.7});total++;
    }
   }
-  s.datasetModel='WaivOps-HH-TRP';
+  s.datasetModel='Google-Magenta-GMD';
   s.datasetModelSourceCount=model.meta.samples_used;
   s.datasetModelMix=mix;
   return total>0;
  }
  function render(){
   const status=$('gmStatus'),count=$('gmCount'),select=$('gmMode');
-  if(count)count.textContent=model?`${model.meta.samples_used.toLocaleString('de-DE')} gelabelte Loops`:'Kein Modell geladen';
+  if(count)count.textContent=model?`${model.meta.samples_used.toLocaleString('de-DE')} echte Drum-Takte`:'Kein Modell geladen';
   if(select)select.value=mode;
   if(status){
-   status.textContent=model?`Trainiertes CC-BY-Modell aktiv · ${model.meta.training_samples} Trainingsloops · ${model.meta.holdout_samples} Validierungsloops · Quelle WaivOps HH-TRP. Unterstützt Trap/Drill/Rage/PluggnB.`:
-     pending?'Trainiertes Groove-Modell wird geprüft …':error||'Es liegt noch kein geprüftes WaivOps-Modell auf diesem Server. Der reguläre Generator bleibt aktiv.';
+   status.textContent=model?`Trainiertes CC-BY-Modell aktiv · ${model.meta.performances_train} Trainingsperformances · ${model.meta.performances_holdout} getrennte Prüfperformances · Quelle Google Magenta GMD (echte Drummer). Rhythmische Grundlage für Trap/Drill/Rage/PluggnB, nicht speziell darauf trainiert.`:
+     pending?'Trainiertes Groove-Modell wird geprüft …':error||'Es liegt noch kein geprüftes Magenta-GMD-Modell auf diesem Server. Der reguläre Generator bleibt aktiv.';
    status.dataset.ready=String(!!model);
   }
  }
@@ -96,12 +96,12 @@
   const parent=$('learnTab')||$('audioRefList')?.closest('.panel');
   if(!parent)return;
   const panel=document.createElement('section');panel.className='panel gm-panel';
-  panel.innerHTML=`<div class="gm-kicker">DATASET TRAINING / CC BY 4.0</div><h2>WaivOps Groove AI</h2><p class="gm-copy">Ein kleines statistisch trainiertes Modell erlernt die Trefferwahrscheinlichkeiten für Kick, Snare, Hi-Hat und Open-Hat aus echten Drum-Labels. Die Töne werden neu generiert, nicht aus fremden Audios kopiert.</p>
-   <div class="gm-statushead"><span id="gmCount">Kein Modell geladen</span><a href="https://doi.org/10.5281/zenodo.15734094" target="_blank" rel="noopener noreferrer">Quelle / Lizenz ↗</a></div>
+  panel.innerHTML=`<div class="gm-kicker">HUMAN MIDI TRAINING / CC BY 4.0</div><h2>Human Groove AI</h2><p class="gm-copy">Ein kleines statistisch trainiertes Modell erlernt die Trefferwahrscheinlichkeiten für Kick, Snare, Hi-Hat und Open-Hat aus zeitgenauen MIDI-Aufnahmen echter Schlagzeuger. Neue Drum-Folgen werden daraus probabilistisch erzeugt, nicht aus fremden Audios kopiert.</p>
+   <div class="gm-statushead"><span id="gmCount">Kein Modell geladen</span><a href="https://magenta.tensorflow.org/datasets/groove" target="_blank" rel="noopener noreferrer">Quelle / Lizenz ↗</a></div>
    <p class="gm-state" id="gmStatus" aria-live="polite">Prüfe Trainingsmodell …</p>
    <label class="gm-field">Lernintensität<select id="gmMode"><option value="off">Aus – normaler Generator</option><option value="blend">Hybrid – 55 % x Lern-Einfluss</option><option value="strong">Dataset – 83 % x Lern-Einfluss</option></select></label>
    <button class="btn btn-outline gm-check" type="button" id="gmRetry">Modell erneut prüfen</button>
-   <p class="gm-licence">Trainingsmaterial: WaivOps HH-TRP · © Patchbanks / WaivOps · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. Das Modell ist kein Audio-Fundamentmodell und erkennt keine Melodien. Ohne gültige Trainingsdaten erfolgt kein angebliches Training.</p>`;
+   <p class="gm-licence">Trainingsmaterial: Google Magenta Groove MIDI Dataset v1.0.0 · © Google LLC · Gillick et al., ICML 2019 · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. Das Modell ist kein Audio-Fundamentmodell und erkennt keine Melodien. Ohne gültige Trainingsdaten erfolgt kein angebliches Training.</p>`;
   parent.insertBefore(panel,parent.firstChild);
   $('gmMode').value=mode;$('gmMode').addEventListener('change',e=>setMode(e.target.value));
   $('gmRetry').addEventListener('click',()=>load(true));
