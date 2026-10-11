@@ -1,0 +1,29 @@
+.al-panel{border:1px solid #655193;background:linear-gradient(145deg,#19152b 0%,#151724 58%)}
+.al-kicker{font-size:10px;color:#c6abff;font-weight:700;letter-spacing:.16em}
+.al-heading h2{font-size:22px;margin:7px 0}
+.al-heading p,.al-notice{font-size:12px;line-height:1.65;color:#b2b3cd;margin:0 0 16px}
+.al-panel input[type=file]{display:block;margin-top:9px;max-width:100%;font-size:12px}
+.al-file,.al-bpm{display:block;font-weight:650;font-size:12px;padding:12px;background:#202236;border:1px solid #45405d;border-radius:12px;margin:10px 0}
+.al-bpm input{display:block;width:100%;margin-top:8px;padding:12px;background:#111323;border:1px solid #4b4765;color:#fff;border-radius:9px;font-size:16px}
+.al-toggle{display:flex;align-items:center;gap:9px;font-size:12px;line-height:1.5;padding:7px 0}
+.al-toggle input[type=checkbox]{width:18px;height:18px;accent-color:#ad85ff;flex:0 0 18px}
+.al-toggle select{max-width:135px;padding:6px;color:#f5efff;background:#202238;border:1px solid #545074;border-radius:9px}
+#al-panel button,#audioImport{min-height:46px}
+#audioImport{width:100%;margin-top:12px;font-size:14px}
+#audioImport:disabled{opacity:.5}
+.al-status{font-size:12px;line-height:1.6;color:#aee0d1;margin:12px 0}
+.al-status[data-error=true]{color:#ff9ea9}
+.al-summary{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:23px 0 10px;border-top:1px solid #433957;padding-top:16px;font-size:12px}
+.al-summary span{color:#b7acda;font-size:11px}
+.al-ref{border:1px solid #363752;background:#171b2a;border-radius:13px;padding:13px;margin:10px 0}
+.al-ref-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.al-ref-heading strong{font-size:12px;overflow-wrap:anywhere}
+.al-ref-heading button{font-size:10px;min-height:35px;padding:6px}
+.al-meta{font-size:11px;line-height:1.6;color:#b6bed5;margin-top:9px}
+.al-actions{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:10px}
+.al-groove{display:grid;gap:6px;margin-top:8px}
+.al-pattern{display:flex;align-items:center;gap:7px}
+.al-pattern small{width:42px;color:#bfbfd5;font-size:10px}
+.al-steps{flex:1;display:grid;grid-template-columns:repeat(16,minmax(0,1fr));align-items:end;gap:3px;height:30px}
+.al-steps span{background:#ad85ff;border-radius:2px 2px 0 0;display:block;min-height:5px}
+.al-notice{border-top:1px solid #413d52;padding-top:12px;margin-top:12px}
