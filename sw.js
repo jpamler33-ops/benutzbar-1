@@ -1,5 +1,5 @@
-const CACHE_NAME='beatforge-pocket-v4.0-groove';
-const ASSETS=['./','./index.html','./producer.css','./producer.js','./audio-learning.js','./audio-learning.css','./groove-model.js','./groove-model.css','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png'];
+const CACHE_NAME='beatforge-pocket-v4.1-gmd-offline';
+const ASSETS=['./','./index.html','./producer.css','./producer.js','./audio-learning.js','./audio-learning.css','./groove-model.js','./groove-model.css','./groove-model.json','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
