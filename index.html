@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#090b12" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="BeatForge" />
+<meta name="description" content="Mobiler Beat-Generator mit Melodien, Drums und MIDI-Export – lokal und kostenlos." />
+<title>BeatForge Pocket – Dein Beat Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#0a0b11;--panel:#131621;--panel2:#181b28;--line:#2a2d3c;--text:#f0f1fa;--muted:#989db3;--accent:#bba2ff;--primary:#9b75ff;--green:#71eac5;--orange:#ffc987;--danger:#ff819e;--radius:17px}
+*{box-sizing:border-box}body{background:radial-gradient(circle at 22% -18%,#242043 0,transparent 38%),radial-gradient(circle at 100% 6%,#1b2433 0,transparent 32%),var(--bg);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif;color:var(--text);margin:0;min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer;transition:transform .15s,background .15s,border-color .15s;touch-action:manipulation}button:active{transform:scale(.975)}button:disabled{cursor:wait;opacity:.55}.shell{max-width:1500px;margin:auto;padding:20px 24px 40px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--line);flex-wrap:wrap}.identity{display:flex;align-items:center;gap:13px}.brand-mark{width:39px;height:39px;border-radius:12px;background:linear-gradient(135deg,#c9adff,#7652e9);display:grid;place-items:center;color:#1a1233;font-weight:1000;font-size:22px;box-shadow:0 4px 22px #8664ed35}.brand-name{font-size:17px;font-weight:900;letter-spacing:.10em}.eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#a5a7c1}.tag{font-size:11px;border:1px solid #3e405a;border-radius:99px;padding:5px 10px;color:#c4c9d9;background:#161925}.header-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.dot{display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:6px}.hero{padding:25px 0 19px;display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}.hero h1{font-size:clamp(25px,3.2vw,44px);letter-spacing:-.055em;margin:0;font-weight:850}.hero h1 span{background:linear-gradient(100deg,#d8c6ff,#9c80fa);color:transparent;background-clip:text}.hero p{color:var(--muted);margin:8px 0 0;max-width:620px}.hero-stats{display:flex;gap:22px}.stat strong{display:block;font-size:20px;font-weight:850}.stat small{font-size:11px;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(260px,315px) minmax(0,1fr) minmax(245px,285px);gap:16px;align-items:start}.column{min-width:0;display:flex;flex-direction:column;gap:15px}.panel{background:linear-gradient(160deg,#171a27,#121520);border:1px solid #2b2e40;border-radius:var(--radius);padding:17px;box-shadow:0 14px 30px #00000014;min-width:0}.panel-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:10px}.panel-title h2{font-size:13px;font-weight:800;margin:0;letter-spacing:.015em}.panel-title small{font-size:11px;color:var(--muted)}.field{margin:0 0 15px}.field:last-child{margin:0}.field label,.label{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:12px;font-weight:700;margin-bottom:7px}.field label .soft{font-weight:400;color:var(--muted)}select,input[type=number],input[type=text]{background:#0e111b;border:1px solid #353747;border-radius:9px;color:#f2f0fc;padding:10px 12px;width:100%;outline:none;min-height:42px}select:focus,input:focus{border-color:#b39bff}.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}.range-line{display:flex;align-items:center;gap:12px}.range-line input{flex:1}.range-line output{min-width:34px;color:var(--accent);font-weight:800;text-align:right}input[type=range]{width:100%;accent-color:#a888ff;height:5px}.btn{border:1px solid #3b3c54;border-radius:11px;min-height:40px;padding:9px 12px;background:#242538;color:#eceafa;font-weight:750;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn:hover{background:#302b4b;border-color:#6c598e}.btn-primary{background:linear-gradient(125deg,#a589fc,#7c5be5);border-color:#a080ff;color:#140b31;box-shadow:0 8px 24px #8b6aec30}.btn-primary:hover{background:linear-gradient(125deg,#c1aafa,#9874ff)}.btn-outline{background:#111420}.btn-green{color:#7ff2c7;border-color:#316653;background:#15352d}.stack{display:flex;flex-direction:column;gap:9px}.action-row{display:flex;gap:9px;flex-wrap:wrap}.action-row>*{flex:1}.notice{font-size:11px;line-height:1.55;color:#b2b5ca;background:#101420;border:1px solid #292d3d;padding:12px;border-radius:10px}.minititle{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b90ae;margin-bottom:9px}.track-title{display:flex;align-items:center;justify-content:space-between;gap:12px}.track-title h2{font-size:17px;letter-spacing:-.025em;margin:0}.track-title p{font-size:11px;color:var(--muted);margin:2px 0 0}.pill{border:1px solid #465044;color:#81e7ae;background:#14241e;border-radius:30px;padding:4px 9px;font-size:10px;letter-spacing:.05em;font-weight:800}.pill.off{border-color:#494452;color:#a8a2b5;background:#211b28}.transport{display:flex;align-items:center;gap:10px;margin:18px 0 15px;flex-wrap:wrap}.play-btn{height:46px;width:46px;flex:0 0 46px;border:0;border-radius:12px;background:var(--green);font-size:20px;color:#0c2220;font-weight:800}.time{font-variant-numeric:tabular-nums;font-size:12px;color:#bfc1d0;font-weight:700}.flex-fill{flex:1}.small-toggle{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);cursor:pointer}.small-toggle input{accent-color:var(--primary)}.wave-wrap{position:relative;background:#0d111b;border:1px solid #323449;border-radius:12px;height:113px;overflow:hidden}.wave-wrap canvas{display:block;width:100%;height:100%}.playhead{width:2px;position:absolute;top:0;bottom:0;left:0;background:#8ef6d4;box-shadow:0 0 8px #6beace;pointer-events:none}.wave-legend{position:absolute;top:8px;left:12px;font-size:10px;color:#aeb7d5;z-index:2}.chips{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0 17px}.chip{font-size:10px;border:1px solid #313649;padding:5px 9px;border-radius:99px;color:#b0bad2;background:#111626}.tracks-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:14px 0 12px}.tracks-head strong{font-size:12px}.tracks-head small{font-size:11px;color:var(--muted)}.lanes{display:flex;flex-direction:column;gap:8px}.lane{display:grid;grid-template-columns:76px minmax(0,1fr);align-items:center;gap:12px}.lane-label{font-size:11px;font-weight:750;display:flex;align-items:center;gap:7px}.lane-color{display:inline-block;width:7px;height:7px;border-radius:3px}.steps{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:3px;min-width:0}.step{height:27px;min-width:0;border:1px solid #343548;background:#1d2130;border-radius:4px;padding:0;position:relative}.step:nth-child(4n+1){border-left-color:#5d576f}.step.on{background:var(--step-color);border-color:var(--step-color);box-shadow:0 0 8px color-mix(in srgb,var(--step-color) 22%,transparent)}.step:hover{border-color:#ddd0ff}.step.nonsel{opacity:.45}.barselect{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.barselect button{font-size:10px;border:1px solid #33384b;border-radius:6px;background:#171b29;padding:5px 8px;color:#b1b3c8}.barselect button.active{background:#473865;color:#f5eaff;border-color:#896dbe}.hint{color:var(--muted);font-size:10px;margin:11px 0 0}.export-row{display:flex;gap:9px;margin-top:18px}.export-row button{flex:1}.insight{padding:11px;border-radius:10px;background:#0d1420;border:1px solid #303549;color:#cdd1e2;font-size:11px;line-height:1.6}.score{display:flex;align-items:center;justify-content:space-between;gap:15px}.score-number{font-size:31px;font-weight:850;letter-spacing:-.055em;color:#c3adff}.progress{height:7px;border-radius:15px;background:#2a2e42;overflow:hidden;margin:12px 0}.progress div{height:100%;background:linear-gradient(90deg,#7868dc,#73dec1);transition:width .3s}.feedback{display:grid;grid-template-columns:1fr 1fr;gap:8px}.feedback .btn{font-size:12px}.record{padding:10px 0;border-bottom:1px solid #2b3040;display:flex;align-items:center;justify-content:space-between;gap:8px}.record:last-child{border:0}.record-title{font-size:11px;font-weight:800}.record-sub{font-size:10px;color:var(--muted)}.record button{border:1px solid #363a4d;padding:6px 9px;background:#1c2031;color:#d6d2ec;font-size:10px;border-radius:7px}.subtle{font-size:11px;color:var(--muted)}.import-zone{border:1px dashed #6c5c96;border-radius:12px;padding:14px;background:#171425;text-align:center}.import-zone p{font-size:11px;color:#b7abc9;margin:6px 0 10px}.tab-strip{display:flex;gap:7px}.tab-strip button{border:1px solid #38384b;border-radius:8px;padding:7px 9px;background:#1a1e2c;color:#c6c7da;font-size:10px}.tab-strip button.current{background:#382e55;color:#ecdcff}.footer{text-align:center;color:#646a82;font-size:11px;margin-top:21px}.toast{position:fixed;bottom:23px;left:50%;transform:translateX(-50%);background:#273b36;color:#c9fae3;border:1px solid #4c8e74;border-radius:13px;padding:12px 18px;z-index:30;box-shadow:0 12px 40px #0008;max-width:calc(100% - 30px);font-size:12px}.hidden{display:none!important}.lozenge{color:#cbb9ff;font-size:10px}.busy{opacity:.75}.info-line{display:flex;justify-content:space-between;gap:8px;font-size:11px;padding:4px 0;color:#b3b7c9}.info-line strong{color:#d9d8ea}.separator{height:1px;background:#2d3040;margin:14px 0}.kbd{font-family:monospace;color:#d4c6fa;background:#333349;padding:2px 5px;border-radius:4px}.tracklist-scroll{max-height:235px;overflow:auto}.file-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:155px}.radio-mark{height:8px;width:8px;display:inline-block;border-radius:100%;margin-right:5px;background:#a184fb}.version{color:#737b99}.license-note{font-size:10px;line-height:1.55;color:#8f95ac}.slider-description{font-size:10px;color:var(--muted);margin-top:4px}
+@media(max-width:1150px){.layout{grid-template-columns:280px minmax(0,1fr)}.right{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start}.right .panel{height:100%}}@media(max-width:760px){.shell{padding:13px 12px 30px}.hero{padding:19px 0}.hero-stats{gap:18px}.layout{display:flex;flex-direction:column;gap:12px}.column{width:100%}.right{display:flex;flex-direction:column}.panel{padding:15px}.lane{grid-template-columns:65px minmax(0,1fr);gap:7px}.steps{gap:2px}.step{height:24px;border-radius:3px}.export-row{flex-wrap:wrap}.export-row button{min-width:40%}.header-meta{display:none}.hero h1{font-size:29px}.hero-stats .stat strong{font-size:18px}}
+
+
+/* BEATFORGE POCKET — mobile first shell layered on original music engine */
+:root{--bg:#090b12;--panel:#151825;--line:#2c2f42;--text:#f3f0ff;--muted:#a4a9bc;--accent:#d7b8ff;--primary:#ad7cff;--green:#79f5ca;--radius:20px}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(ellipse 90% 28% at 48% -4%,#342351 0,transparent 75%),#090b12;overscroll-behavior-y:none}
+button,select,input{touch-action:manipulation}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #cdb4ff;outline-offset:2px}
+.shell{max-width:780px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top,0px)) 15px calc(112px + env(safe-area-inset-bottom,0px))}
+.top,.hero,.layout,.footer{display:none!important}
+.pocket-bar{display:flex;align-items:center;justify-content:space-between;margin:2px 0 20px;min-height:46px;gap:10px}
+.pocket-identity{display:flex;align-items:center;gap:10px}
+.pocket-mark{display:grid;place-items:center;width:41px;height:41px;border-radius:14px;background:linear-gradient(145deg,#e3c1ff,#9166ef);font-size:26px;font-weight:900;color:#251341;box-shadow:0 6px 22px #a785eb33}
+.pocket-name{font-weight:900;font-size:16px;letter-spacing:.13em;line-height:1.2}
+.pocket-sub{font-size:10px;color:#a7a5bc;margin-top:2px;letter-spacing:.06em}
+.pocket-status{display:flex;align-items:center;gap:6px;border:1px solid #2c4b42;color:#98ffdb;background:#11271f;border-radius:30px;padding:7px 9px;font-size:10px;font-weight:800;white-space:nowrap}
+.pocket-status::before{content:'';height:6px;width:6px;border-radius:50%;background:#75eaba}
+.pocket-stage{min-height:70vh}
+.pocket-tab{display:none;animation:tabup .22s ease-out}
+.pocket-tab.active{display:flex;flex-direction:column;gap:14px}
+@keyframes tabup{from{opacity:.55;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.pocket-intro{padding:3px 1px 6px}
+.pocket-kicker{font-size:10px;font-weight:750;letter-spacing:.22em;color:#b39af1;margin-bottom:7px}
+.pocket-intro h1{font-size:clamp(31px,9vw,46px);line-height:1.08;letter-spacing:-.065em;font-weight:860;margin:0}
+.pocket-intro h1 span{color:#d5b3ff}
+.pocket-intro p{font-size:12px;margin:9px 0 0;color:#aeb1c9;max-width:36rem;line-height:1.6}
+.panel{background:linear-gradient(160deg,#171b2a,#121522);border:1px solid #303346;border-radius:19px;padding:16px;box-shadow:0 12px 34px #0002}
+.panel-title{margin-bottom:13px}.panel-title h2{font-size:14px}.panel-title small{font-size:11px}
+.field label{font-size:12px;margin-bottom:8px}
+select,input[type=number],input[type=text]{min-height:49px;border:1px solid #383c54;border-radius:12px;padding:12px 13px;font-size:16px;background:#0e111e;color:#f4eeff}
+.pair{gap:10px}.field{margin-bottom:14px}
+.btn{min-height:47px;border-radius:12px;padding:11px 12px;font-size:12px}
+#generate{min-height:58px!important;font-size:15px!important;border-radius:16px;font-weight:900;box-shadow:0 10px 26px #9372ef3b;letter-spacing:.005em}
+#variant,#surprise{min-height:45px}
+.pocket-tab .stack{gap:9px}
+#generatorPanel .panel-title{margin-bottom:15px}
+#generatorPanel .stack{margin-top:15px!important}
+.mobile-advanced{margin-top:2px;border:1px solid #37374f;border-radius:12px;background:#111523;padding:0 12px;overflow:hidden}
+.mobile-advanced summary{list-style:none;cursor:pointer;min-height:47px;display:flex;align-items:center;justify-content:space-between;font-weight:760;color:#d5c9f2;font-size:12px}
+.mobile-advanced summary::-webkit-details-marker{display:none}
+.mobile-advanced summary:after{content:'⌄';font-size:20px;line-height:1;transform-origin:center;transition:transform .2s}
+.mobile-advanced[open] summary:after{transform:rotate(180deg)}
+.mobile-advanced .pair{margin-top:3px}
+.mobile-advanced .field{margin-bottom:15px}
+.mobile-advanced input[type=range]{min-height:32px}
+#generatorPanel .panel-title h2:before{content:'✦';color:#c7a8ff;margin-right:8px}
+.track-title{align-items:flex-start}
+.track-title h2{font-size:18px;line-height:1.25;overflow-wrap:anywhere}
+.track-title p{font-size:10px;line-height:1.6}
+.track-title>div:first-child{min-width:0}
+#learningBadge{flex-shrink:0;font-size:9px}
+.transport{gap:10px;margin:16px 0}
+.play-btn{height:60px;width:60px;flex:0 0 60px;border-radius:17px;font-size:23px;box-shadow:0 8px 22px #4fdbaa2d}
+#stop{height:50px!important;min-height:50px;border-radius:14px;padding:0 16px}
+.time{font-size:11px;flex:1;min-width:95px}
+.transport .flex-fill{display:none}
+#save{width:100%;min-height:44px;order:5}
+.small-toggle{margin-left:auto;min-height:44px;font-size:12px}
+.wave-wrap{height:115px;border-radius:13px}
+.chips{margin:11px 0 0;gap:6px}.chip{font-size:10px;padding:6px 9px}
+.mobile-ratebar{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mobile-ratebar .btn{min-height:48px;font-size:12px}
+.mobile-ratebar .btn:first-child{color:#85ebc7;border-color:#305b4d;background:#122b24}
+.mobile-ratebar .btn:last-child{color:#e7c3d0;background:#241b29}
+.mobile-mini-note{font-size:11px;color:#999fb8;margin:4px 2px 0;line-height:1.55}
+.mobile-tabs{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;justify-content:center;padding:9px max(8px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));background:linear-gradient(180deg,#0c101ce8,#0b0e19fa);border-top:1px solid #32354a;box-shadow:0 -16px 40px #0505109c;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.mobile-tabs-inner{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;width:min(100%,760px)}
+.mobile-navitem{color:#9196b0;background:transparent;border:0;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:57px;padding:6px 2px;font-size:10px;font-weight:750}
+.mobile-navitem .navicon{font-size:21px;line-height:1.1;height:23px}
+.mobile-navitem.active{color:#dec4ff;background:#32274d}
+.mobile-navitem.active .navicon{color:#d0a8ff}
+#studioTab .panel{margin:0}
+#editorTab .panel{padding:16px 12px}
+.editor-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;margin:12px -5px;padding:0 5px 12px;scrollbar-color:#67547f #202331}
+#lanes{overflow:visible;min-width:592px;gap:12px}
+#lanes .lane{grid-template-columns:78px minmax(0,1fr);gap:10px;min-width:592px}
+#lanes .lane-label{font-size:12px;background:#151825}
+#lanes .steps{gap:4px}
+#lanes .step{height:39px;border-radius:7px;min-width:0}
+.tracks-head{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin:0}
+.tracks-head strong{font-size:14px}
+#barSelect{justify-content:flex-start;flex-wrap:nowrap;overflow:auto;padding-bottom:5px}
+#barSelect button{min-height:36px;min-width:38px;flex:0 0 auto;font-size:12px}
+#editorTab .export-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}
+#regenBass{grid-column:1/-1}
+#regenMelody,#regenDrums,#regenBass{white-space:normal;min-height:49px}
+#editorTab .hint{font-size:11px;line-height:1.6}
+#batchGenerate{min-height:53px;width:100%;font-size:13px;margin:2px 0 15px}
+#batchResults,#library,#referenceList{max-height:none}
+.record{padding:14px 0}.record-title{font-size:12px}.record-sub{font-size:11px;margin-top:4px}
+.record button{min-height:39px;font-size:11px;padding:9px 13px}
+.feedback .btn{min-height:51px}
+.score-number{font-size:38px}
+.insight{font-size:12px;line-height:1.65}
+.import-zone{padding:24px 14px}.import-zone p{font-size:12px}
+#exportMidi,#exportWav,#exportJson{min-height:57px;font-size:13px;justify-content:flex-start;padding-left:19px}
+.pocket-export-tip{font-size:12px;line-height:1.65;border:1px solid #3d4158;background:#111625;border-radius:14px;padding:14px;color:#b6bed4}
+.toast{bottom:calc(100px + env(safe-area-inset-bottom,0px));max-width:calc(100% - 36px);border-radius:14px;text-align:center}
+@media(min-width:680px){.shell{padding-left:24px;padding-right:24px}.pocket-tab.active{gap:19px}.panel{padding:22px}.pocket-intro h1{font-size:46px}}
+@media(max-width:355px){.shell{padding-left:10px;padding-right:10px}.pocket-status{font-size:9px}.panel{padding:12px}.time{font-size:10px;min-width:78px}.mobile-navitem{font-size:9px}.mobile-navitem .navicon{font-size:19px}}
+@media(prefers-reduced-motion:reduce){.pocket-tab{animation:none};html{scroll-behavior:auto}}
+
+</style>
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="apple-touch-icon" href="./icon-180.png" />
+</head>
+<body>
+<div class="shell">
+<header class="top"><div class="identity"><div class="brand-mark">≋</div><div><div class="brand-name">BEATFORGE <span class="version">/ LAB</span></div><div class="eyebrow">Adaptive music engine · Local-first</div></div></div><div class="header-meta"><span class="tag"><span class="dot"></span> Offline Engine</span><span class="tag">v1.0 · Prototype</span></div></header>
+<section class="hero"><div><div class="eyebrow" style="margin-bottom:7px">GENERATE · LISTEN · LEARN · EXPORT</div><h1>Ideen werden zu <span>Tracks.</span></h1><p>Melodien, Akkorde, 808s und Drums automatisch erzeugen. Bewerte die besten Beats – die Engine passt ihre nächste Generation daran an.</p></div><div class="hero-stats"><div class="stat"><strong id="generatedCount">0</strong><small>Tracks erzeugt</small></div><div class="stat"><strong id="likedCount">0</strong><small>Gute Beispiele</small></div><div class="stat"><strong id="referenceCount">0</strong><small>MIDI-Referenzen</small></div></div></section>
+<div class="layout">
+<aside class="column">
+<section class="panel"><div class="panel-title"><h2>01 / Generation</h2><small>Kompositionsparameter</small></div>
+<div class="field"><label for="genre">Genre <span class="soft">Preset</span></label><select id="genre"><option value="trap">Trap / Dark Trap</option><option value="drill">UK Drill</option><option value="rage">Rage / Hypertrap</option><option value="pluggnb">PluggnB</option><option value="rnb">R&B / Soul</option><option value="house">House</option><option value="boom">Boom Bap</option></select></div>
+<div class="pair"><div class="field"><label for="key">Tonart</label><select id="key"><option value="0">C</option><option value="1">C#</option><option value="2">D</option><option value="3">D#</option><option value="4">E</option><option value="5">F</option><option value="6">F#</option><option value="7">G</option><option value="8">G#</option><option value="9">A</option><option value="10">A#</option><option value="11">B</option></select></div><div class="field"><label for="scale">Skala</label><select id="scale"><option value="minor">Moll</option><option value="major">Dur</option><option value="dorian">Dorisch</option><option value="phrygian">Phrygisch</option></select></div></div>
+<div class="pair"><div class="field"><label for="bpm">Tempo (BPM)</label><input id="bpm" type="number" min="55" max="220" step="1" value="142" /></div><div class="field"><label for="bars">Länge</label><select id="bars"><option value="4">4 Takte</option><option value="8" selected>8 Takte</option><option value="16">16 Takte</option></select></div></div>
+<div class="field"><label for="energy">Energie <span class="soft">minimal → aggressiv</span></label><div class="range-line"><input id="energy" type="range" min="0" max="100" value="65" /><output id="energyOut">65%</output></div></div>
+<div class="field"><label for="complexity">Komplexität <span class="soft">simpler → busy</span></label><div class="range-line"><input id="complexity" type="range" min="0" max="100" value="55" /><output id="complexityOut">55%</output></div></div>
+<div class="field"><label for="influence">Lern-Einfluss <span class="soft">neu → vertraut</span></label><div class="range-line"><input id="influence" type="range" min="0" max="100" value="60" /><output id="influenceOut">60%</output></div><div class="slider-description">Beeinflusst Stilmerkmale, keine Kopie fertiger Tracks.</div></div>
+<div class="stack" style="margin-top:20px"><button id="generate" class="btn btn-primary" style="min-height:50px;font-size:14px">✦ Neuen Beat generieren</button><div class="action-row"><button id="variant" class="btn btn-outline">↝ Variation</button><button id="surprise" class="btn btn-outline">⤨ Zufall</button></div><button id="batchGenerate" class="btn btn-outline">⚡ Auto-Lab · 12 Beats erzeugen</button></div></section>
+<section class="panel"><div class="panel-title"><h2>02 / Audio-Export</h2><small>DAW-ready</small></div><p class="subtle" style="margin-top:-9px">MIDI für FL Studio, Ableton, Logic und WAV als Vorschau. Export enthält alle Spuren.</p><div class="stack"><button id="exportMidi" class="btn">⇩ MIDI · einzelne Spuren</button><button id="exportWav" class="btn btn-outline">⇩ WAV · Audiomix</button><button id="exportJson" class="btn btn-outline">⇩ Projekt · JSON</button></div><div class="license-note" style="margin-top:12px">Die Audioausgabe verwendet synthetische Demo-Instrumente, keine professionellen Sample-Libraries.</div></section>
+</aside>
+<main class="column">
+<section class="panel"><div class="track-title"><div><div class="eyebrow" style="margin-bottom:6px">AKTUELLER ENTWURF</div><h2 id="songName">—</h2><p id="songSummary">Noch kein Beat erzeugt</p></div><span id="learningBadge" class="pill off">NO DATA</span></div>
+<div class="transport"><button id="play" class="play-btn" aria-label="Abspielen">▶</button><button id="stop" class="btn btn-outline" aria-label="Stopp" style="height:44px">■</button><span id="timeDisplay" class="time">00:00 / 00:00</span><div class="flex-fill"></div><label class="small-toggle"><input id="loop" type="checkbox" checked> Loop</label><button id="save" class="btn btn-outline">♡ Speichern</button></div>
+<div class="wave-wrap"><div class="wave-legend">ARRANGEMENT / LIVE PLAYHEAD</div><canvas id="timeline" width="1000" height="125"></canvas><div class="playhead" id="playhead"></div></div><div id="metaChips" class="chips"></div>
+<div class="tracks-head"><strong>Step Sequencer <span style="color:#75778b;font-weight:500">/ Klick zum Bearbeiten</span></strong><div id="barSelect" class="barselect"></div></div><div id="lanes" class="lanes"></div><p class="hint">Die sichtbaren 16 Steps entsprechen einem Takt. Du kannst einzelne Drum-Schläge ein- oder ausschalten. Melodie und Akkorde lassen sich in der exportierten MIDI-Datei bearbeiten.</p><div class="export-row"><button id="regenMelody" class="btn btn-outline">♬ Neue Melodie</button><button id="regenDrums" class="btn btn-outline">▦ Neue Drums</button><button id="regenBass" class="btn btn-outline">∿ Neue 808</button></div></section>
+<section class="panel"><div class="panel-title"><h2>Auto-Lab / Ideenlauf</h2><small>12 Kandidaten / Top 5</small></div><div class="subtle" style="margin-top:-9px;margin-bottom:11px">Mehrere Beats automatisch erzeugen und anhand messbarer Strukturmerkmale vorsortieren. Kein Hit-Potenzial-Score.</div><div id="batchResults" class="tracklist-scroll"><div class="subtle">Starte links „Auto-Lab“, um zwölf neue Ideen zu erzeugen.</div></div></section>
+<section class="panel"><div class="panel-title"><h2>03 / Favoriten & Projekte</h2><small id="libraryTotal">0 Projekte</small></div><div id="library" class="tracklist-scroll"><div class="subtle">Noch keine gespeicherten Entwürfe.</div></div></section>
+</main>
+<aside class="column right">
+<section class="panel"><div class="panel-title"><h2>04 / Adaptive Engine</h2><small>Bewertungen</small></div><div class="score"><div><div class="eyebrow">LERNBEISPIELE</div><div class="score-number" id="samples">0</div></div><div style="text-align:right"><div class="eyebrow">GENRE-MEMORY</div><strong id="genreMemory" style="font-size:15px">0 Beats</strong></div></div><div class="progress"><div id="learningBar" style="width:0%"></div></div><div id="learningInfo" class="insight">Noch kein Feedback. Generiere und bewerte Beats, damit die Engine deinen Geschmack modelliert.</div><div class="separator"></div><div class="minititle">DIESEN BEAT BEWERTEN</div><div class="feedback"><button id="like" class="btn btn-green">♡ Gefällt mir</button><button id="dislike" class="btn btn-outline">× Nicht meins</button></div><div class="hint">Bewertungen gewichten Tonfolgen, Groove, Dichte, Akkordtypen und Tempo. Schlechte Beispiele werden abgeschwächt.</div></section>
+<section class="panel"><div class="panel-title"><h2>05 / Aus eigenen Songs lernen</h2><small>.MID / .MIDI</small></div><div class="import-zone"><div style="font-size:22px">♬</div><strong style="font-size:12px">MIDI als Referenz analysieren</strong><p>Liest Noten, Rhythmus, Register und Tempo aus einer eigenen oder lizenzierten MIDI-Datei.</p><button id="importButton" class="btn btn-outline" style="font-size:11px">Datei auswählen</button><input id="midiInput" type="file" accept=".mid,.midi,audio/midi" class="hidden" /></div><div class="separator"></div><div id="referenceList" class="tracklist-scroll"><div class="subtle">Noch keine MIDI-Referenzen.</div></div><p class="license-note" style="margin-top:8px">Keine MP3/WAV-Analyse und kein neuronales Modell in dieser Version. Keine fremden geschützten Aufnahmen ohne Rechte zum Training verwenden.</p></section>
+<section class="panel"><div class="panel-title"><h2>06 / Training & Daten</h2><small>lokal</small></div><div class="info-line"><span>Persistenz</span><strong>Browser / localStorage</strong></div><div class="info-line"><span>Modelltyp</span><strong>Adaptiver Generator</strong></div><div class="info-line"><span>Cloud-Kosten</span><strong>0 €</strong></div><div class="info-line"><span>Datentransfer</span><strong>Keiner</strong></div><div class="stack" style="margin-top:12px"><button id="exportTraining" class="btn btn-outline">⇩ Trainingsdaten sichern</button><button id="importTraining" class="btn btn-outline">⇧ Trainingsdaten laden</button><input id="trainingInput" type="file" accept=".json,application/json" class="hidden" /><button id="resetTraining" class="btn" style="border-color:#573c4d;color:#e4a1b1">Lernspeicher zurücksetzen</button></div></section>
+</aside>
+</div><div class="footer">BEATFORGE / ADAPTIVE LAB · Experimental Prototyp · Keine kommerzielle Klangqualität oder Rechteprüfung garantiert</div>
+</div><div id="toast" class="toast hidden" role="status"></div>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const MEMORY_KEY = 'beatforge.adaptive.v1';
+const PITCH_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const SCALES = {minor:[0,2,3,5,7,8,10], major:[0,2,4,5,7,9,11], dorian:[0,2,3,5,7,9,10], phrygian:[0,1,3,5,7,8,10]};
+const GENRES = {
+ trap:{name:'Dark Trap', bpm:142,scale:'minor',swing:.03,hat:2, density:.6, progressions:[[0,5,2,6],[0,6,5,6],[0,3,5,4],[0,5,3,6]]},
+ drill:{name:'UK Drill',bpm:142,scale:'minor',swing:.055,hat:2,density:.67,progressions:[[0,5,3,6],[0,6,5,4],[0,4,5,3]]},
+ rage:{name:'Rage',bpm:155,scale:'minor',swing:0,hat:1,density:.83,progressions:[[0,5,3,6],[0,6,3,5],[0,4,5,6]]},
+ pluggnb:{name:'PluggnB',bpm:148,scale:'major',swing:.02,hat:2,density:.65,progressions:[[5,3,0,4],[0,4,5,3],[0,5,3,4]]},
+ rnb:{name:'R&B',bpm:92,scale:'minor',swing:.08,hat:4,density:.53,progressions:[[0,5,3,6],[5,3,0,4],[0,3,5,4]]},
+ house:{name:'House',bpm:124,scale:'minor',swing:0,hat:2,density:.75,progressions:[[0,5,3,6],[0,4,5,3],[5,3,0,4]]},
+ boom:{name:'Boom Bap',bpm:92,scale:'minor',swing:.09,hat:2,density:.57,progressions:[[0,3,5,4],[0,5,3,6],[0,4,5,3]]}
+};
+const LANES = [
+ {id:'melody',name:'Melody',color:'#bd9aff'}, {id:'chords',name:'Chords',color:'#677cfe'}, {id:'bass',name:'808 Bass',color:'#70dac2'},
+ {id:'kick',name:'Kick',color:'#ffbf70'}, {id:'snare',name:'Snare',color:'#ff7898'}, {id:'hat',name:'Hi-Hat',color:'#a3acba'}, {id:'openhat',name:'Open Hat',color:'#ffe38c'}
+];
+const DRUMS = ['kick','snare','hat','openhat'];
+let state={generated:0,ratings:[],references:[],library:[],history:[],version:1};
+let song=null, playing=false,audioCtx=null,playStart=0,loopTimer=null,stopTimer=null,animId=null,selectedBar=0, variationOf=null,batchCandidates=[];
+function clamp(v,a,b){return Math.min(b,Math.max(a,v))}
+function rint(r,a,b){return a+Math.floor(r()*(b-a+1))}
+function choose(r,arr){return arr[Math.floor(r()*arr.length)]}
+function randomSeed(){return Math.floor(Math.random()*4294967295)>>>0}
+function rng(seed){let a=seed>>>0;return function(){a+=0x6D2B79F5;let t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
+function weighted(r,arr,weights){let z=weights.reduce((a,b)=>a+Math.max(0,b),0);if(!z)return choose(r,arr);let x=r()*z;for(let i=0;i<arr.length;i++){x-=Math.max(0,weights[i]);if(x<=0)return arr[i]}return arr.at(-1)}
+function deepClone(a){return JSON.parse(JSON.stringify(a))}
+function ensureState(){try{let raw=localStorage.getItem(MEMORY_KEY);if(raw){let parsed=JSON.parse(raw);if(parsed&&parsed.version===1){state={...state,...parsed};if(!Array.isArray(state.history))state.history=[]}}}catch(e){notify('Gespeicherte Daten konnten nicht gelesen werden.')}}
+function persist(){try{localStorage.setItem(MEMORY_KEY,JSON.stringify(state))}catch(e){state.history=state.history.slice(-80);state.library=state.library.slice(-12);try{localStorage.setItem(MEMORY_KEY,JSON.stringify(state))}catch(_){notify('Speicher voll: bitte Trainingsdaten exportieren.')}}}
+function notify(message){const t=$('toast');t.textContent=message;t.classList.remove('hidden');clearTimeout(notify.t);notify.t=setTimeout(()=>t.classList.add('hidden'),3400)}
+function noteName(m){return PITCH_NAMES[(m%12+12)%12]+(Math.floor(m/12)-1)}
+function degreeMidi(root,scale,degree,oct=0){let d=((degree%7)+7)%7;return 60+root+scale[d]+12*(Math.floor(degree/7)+oct)}
+function event(lane,start,dur,pitch=60,vel=.8){return {lane,start,dur,pitch,vel}}
+function featuresOf(s){
+ let mel=s.events.filter(e=>e.lane==='melody').sort((a,b)=>a.start-b.start), kicks=s.events.filter(e=>e.lane==='kick'),hats=s.events.filter(e=>e.lane==='hat');
+ let intervals=mel.slice(1).map((e,i)=>clamp(e.pitch-mel[i].pitch,-12,12));
+ let rhythmic=mel.map(e=>((Math.round(e.start)%16)+16)%16);
+ return {genre:s.genre,bpm:s.bpm,root:s.root,scale:s.scale,energy:s.energy,complexity:s.complexity,melDensity:mel.length/s.bars,kickDensity:kicks.length/s.bars,hatDensity:hats.length/s.bars,meanPitch:mel.length?mel.reduce((a,e)=>a+e.pitch,0)/mel.length:72,intervals:intervals.slice(0,42),rhythm:rhythmic.slice(0,64),progression:s.progression.slice(),syncopation:mel.length?mel.filter(e=>Math.round(e.start)%4!==0).length/mel.length:.5};
+}
+function positiveExamples(genre){return [...state.ratings.filter(e=>e.rating===1),...state.references.map(e=>({...e,rating:1}))].filter(e=>e.features&&e.features.genre===genre)}
+function negativeExamples(genre){return state.ratings.filter(e=>e.rating===-1&&e.features&&e.features.genre===genre)}
+function learnBias(genre, influence, r){
+ const liked=positiveExamples(genre), disliked=negativeExamples(genre);
+ if(!liked.length||r()>influence)return null;
+ let pool=liked.map(e=>e.features),weights=liked.map(e=>e.source==='midi'?1.2:1);
+ for(let i=0;i<pool.length;i++){
+  let f=pool[i];let penalty=disliked.reduce((n,b)=>n+(b.features.progression.join(',')===f.progression.join(',')?1:0)+(Math.abs(b.features.melDensity-f.melDensity)<.5?.6:0),0);
+  weights[i]=Math.max(.15,weights[i]/(1+.2*penalty));
+ }
+ return weighted(r,pool,weights);
+}
+// Every generated track updates novelty statistics, even before an explicit rating.
+// Explicit feedback overrides novelty through positive/negative weights.
+function chooseProgression(r,genre){
+ const choices=GENRES[genre].progressions;
+ const prior=state.history.filter(h=>h.features?.genre===genre);
+ const likes=positiveExamples(genre),dislikes=negativeExamples(genre);
+ const scores=choices.map(pattern=>{
+  const key=pattern.join(',');
+  const used=prior.filter(h=>h.features?.progression?.join(',')===key).length;
+  const recent=prior.slice(-8).filter(h=>h.features?.progression?.join(',')===key).length;
+  const good=likes.filter(v=>v.features?.progression?.join(',')===key).length;
+  const bad=dislikes.filter(v=>v.features?.progression?.join(',')===key).length;
+  return Math.max(.05,(1+good*.9)/(1+used*.14+recent*.75+bad*1.25));
+ });
+ return weighted(r,choices,scores).slice();
+}
+function configFromUI(){return {genre:$('genre').value,root:+$('key').value,scale:$('scale').value,bpm:clamp(Math.round(+$('bpm').value||140),55,220),bars:+$('bars').value,energy:+$('energy').value,complexity:+$('complexity').value,influence:+$('influence').value/100}}
+function getBarChord(root,scale,progression,b){let d=progression[b%progression.length];return [degreeMidi(root,scale,d,0),degreeMidi(root,scale,d+2,0),degreeMidi(root,scale,d+4,0)]}
+function fillNotes(s,r,bias,parts=['melody','chords','bass','drums']){
+ const scale=SCALES[s.scale]||SCALES.minor, density=s.complexity/100,energy=s.energy/100, cfg=GENRES[s.genre],numberOfBars=s.bars;
+ if(parts.includes('chords')){
+  for(let b=0;b<numberOfBars;b++){
+   let chord=getBarChord(s.root,scale,s.progression,b);
+   if(s.genre==='rage')chord=chord.map(v=>v+12);
+   let starts=s.genre==='house'?[0,8]:s.genre==='pluggnb'?[0,6,12]:[0];
+   for(let st of starts)for(let v of chord) s.events.push(event('chords',b*16+st,st===0?Math.min(12,16-st):Math.min(4,16-st),v+(s.genre==='rnb'?-12:0),.26+energy*.19));
+  }
+ }
+ if(parts.includes('bass')){
+  for(let b=0;b<numberOfBars;b++){
+   let base=degreeMidi(s.root,scale,s.progression[b%4],-2),pattern;
+   if(s.genre==='house')pattern=[0,4,8,12];
+   else if(s.genre==='drill')pattern=[0,3,7,10,14];
+   else if(s.genre==='rnb')pattern=[0,9,13];
+   else pattern=[0,6,10,14];
+   for(let st of pattern){if(st>0&&r()>(.47+energy*.3))continue;let shift=r()<.13?7:0;s.events.push(event('bass',b*16+st,st===0?6:Math.min(rint(r,2,5),16-st),base+shift,.62+energy*.27))}
+  }
+ }
+ if(parts.includes('melody')){
+  let motif=[];let preferred=bias?.intervals?.length&&r()<s.influence ? bias.intervals : null;
+  let prefRhythm=bias?.rhythm?.length&&r()<s.influence*.65?bias.rhythm:null;
+  let octaveShift=s.genre==='rage'?1:(s.genre==='rnb'?-1:0);if(bias&&r()<s.influence*.7)octaveShift+=clamp(Math.round((bias.meanPitch-74)/12),-1,1);
+  for(let b=0;b<numberOfBars;b++){
+   const prevMotif=(b%4===2||b%4===3)&&motif.length;
+   let count=clamp(Math.round((2+density*6)*(cfg.density+.4)+(r()-.5)*3),2,12);
+   if(bias&&r()<s.influence*.6)count=clamp(Math.round(bias.melDensity+(r()-.5)*2),2,12);
+   let starts=[];
+   if(prevMotif){starts=motif.map(m=>m.st)}
+   else if(prefRhythm&&r()<.65){starts=[...new Set(prefRhythm.slice(0,count).map(v=>v%16))].sort((a,b)=>a-b)}
+   else{starts=[0];let attempts=0;while(starts.length<count&&attempts++<70){let st=rint(r,0,15);if(r()<.72)st=Math.floor(st/2)*2;if(!starts.includes(st))starts.push(st)}starts.sort((a,b)=>a-b)}
+   const chord=s.progression[b%4],prevPitches=s.events.filter(e=>e.lane==='melody');let previous=prevPitches.length?prevPitches.at(-1).pitch:degreeMidi(s.root,scale,chord+4,1+octaveShift);
+   let current=[];
+   for(let i=0;i<starts.length;i++){
+    let st=starts[i];let degree=chord+choose(r,[0,2,4,7,9]);let pitch=degreeMidi(s.root,scale,degree,1+octaveShift);
+    if(prevMotif){degree=chord+motif[i%motif.length].degree;pitch=degreeMidi(s.root,scale,degree,1+octaveShift)}
+    else if(preferred&&i>0&&r()<.7){let candidate=previous+preferred[(b*3+i)%preferred.length];let potential=[];for(let t=-1;t<4;t++)for(let z=0;z<7;z++)potential.push(degreeMidi(s.root,scale,z+7*t,1+octaveShift));potential.sort((a,b)=>Math.abs(a-candidate)-Math.abs(b-candidate));pitch=potential[0]}
+    else if(i>0){let chordTones=[0,2,4,7,9];let near=chordTones.map(t=>degreeMidi(s.root,scale,chord+t,1+octaveShift));near.sort((a,b)=>Math.abs(a-previous)-Math.abs(b-previous));pitch=r()<.74?near[0]:choose(r,near.slice(0,3))}
+    pitch=clamp(pitch,48,96);let next=starts[i+1]??16,dur=clamp(rint(r,1,Math.min(4,Math.max(1,next-st))),1,16-st);
+    if(r()<.12)dur=Math.min(8,16-st);
+    s.events.push(event('melody',b*16+st,dur,pitch,.45+energy*.37+r()*.10));current.push({st,degree:(degree-chord),pitch});previous=pitch;
+   }
+   if(!prevMotif&&b%4===0)motif=current;
+  }
+ }
+ if(parts.includes('drums')){
+  for(let b=0;b<numberOfBars;b++){
+   let start=b*16;let kicks=[],snares=[],hats=[],oh=[];
+   if(s.genre==='house') {kicks=[0,4,8,12];snares=[4,12];hats=[2,6,10,14]}
+   else if(s.genre==='boom'){kicks=[0,6,10];snares=[4,12];hats=[0,2,4,6,8,10,12,14]}
+   else if(s.genre==='drill'){kicks=[0,3,7,11,14];snares=[8];hats=[0,2,4,6,8,10,12,14]}
+   else if(s.genre==='rnb'){kicks=[0,7,11];snares=[8];hats=[0,4,6,8,12,14]}
+   else{ kicks=[0,6,10,14];snares=[8];hats=Array.from({length:16},(_,i)=>i).filter(i=>i%cfg.hat===0)}
+   if(bias&&r()<s.influence*.5){let goal=clamp(Math.round(bias.kickDensity),1,8);while(kicks.length<goal){let pos=rint(r,1,15);if(!kicks.includes(pos))kicks.push(pos)}while(kicks.length>goal)kicks.pop()}
+   for(let st of kicks){if(st>0&&r()>.55+energy*.33)continue;s.events.push(event('kick',start+st,.8,36,.7+energy*.25))}
+   if(r()<density*.7)s.events.push(event('kick',start+choose(r,[2,5,11,13]),.8,36,.50));
+   for(let st of snares)s.events.push(event('snare',start+st,.65,38,.72+energy*.2));
+   if(s.genre==='rage'&&r()<.5)s.events.push(event('snare',start+12,.65,38,.56));
+   if(r()<.19)s.events.push(event('snare',start+15,.5,38,.36));
+   let desired=bias&&r()<s.influence*.5?clamp(Math.round(bias.hatDensity),3,16):hats.length;
+   if(desired>hats.length){for(let st=0;st<16;st++){if(hats.length>=desired)break;if(!hats.includes(st))hats.push(st)}}
+   for(let st of hats){if(r()<.06&&energy<.65)continue;s.events.push(event('hat',start+st,.24,42,(st%4===0?.51:.34)+r()*.14));if(r()<density*.12)s.events.push(event('hat',start+st+.5,.16,42,.26))}
+   if(r()<.5+energy*.35)oh.push(choose(r,[3,7,11,15]));
+   for(let st of oh)s.events.push(event('openhat',start+st,.7,46,.34+energy*.25));
+  }
+ }
+ s.events.sort((a,b)=>a.start-b.start||LANES.findIndex(c=>c.id===a.lane)-LANES.findIndex(c=>c.id===b.lane));
+}
+function buildSong(overrides={},regenPart=null){
+ const opt={...configFromUI(),...overrides};let r=rng(opt.seed??randomSeed()),seed=opt.seed??randomSeed();r=rng(seed);
+ const bias=learnBias(opt.genre,opt.influence,r);
+ let s={id:Date.now().toString(36)+'-'+Math.floor(r()*1e6).toString(36),seed,genre:opt.genre,root:opt.root,scale:opt.scale,bpm:opt.bpm,bars:opt.bars,energy:opt.energy,complexity:opt.complexity,influence:opt.influence,progression:bias&&r()<opt.influence*.75?bias.progression.slice():chooseProgression(r,opt.genre),events:[],createdAt:Date.now(),rated:0,biasUsed:!!bias};
+ fillNotes(s,r,bias);return s;
+}
+function updateSong(type='new'){
+ stopPlayback();
+ if(type==='variation'&&song){let prev=song;const next=buildSong({genre:prev.genre,root:prev.root,scale:prev.scale,bpm:prev.bpm,bars:prev.bars,energy:prev.energy,complexity:prev.complexity,influence:prev.influence});next.progression=prev.progression.slice();next.events=[];fillNotes(next,rng(next.seed),learnBias(next.genre,next.influence,rng(next.seed^612)));song=next}
+ else if(type==='surprise'){const r=Math.random;let genres=Object.keys(GENRES);let g=choose(r,genres);$('genre').value=g;applyGenre(true);$('key').value=rint(r,0,11);$('energy').value=rint(r,25,95);$('complexity').value=rint(r,25,90);updateRanges();song=buildSong()}
+ else song=buildSong();
+ state.generated++;
+ state.history.push({features:featuresOf(song),at:Date.now(),id:song.id,source:'generated'});state.history=state.history.slice(-150);
+ selectedBar=0;persist();renderAll();notify('Neuer Beat erzeugt. Bewerte ihn, damit die Engine lernt.');
+}
+function regenerate(part){if(!song)return;stopPlayback();let s=deepClone(song);s.id=Date.now().toString(36)+'-'+Math.floor(Math.random()*1e8).toString(36);s.seed=randomSeed();s.rated=0;s.createdAt=Date.now();let r=rng(s.seed);let bias=learnBias(s.genre,s.influence,r);let parts=part==='drums'?['drums']:[part];let names=part==='drums'?DRUMS:[part];s.events=s.events.filter(e=>!names.includes(e.lane));fillNotes(s,r,bias,parts);song=s;state.generated++;state.history.push({features:featuresOf(s),at:Date.now(),id:s.id,source:'generated'});state.history=state.history.slice(-150);persist();renderAll();notify('Spur neu erzeugt. Andere Spuren bleiben erhalten.');}
+function compositionScore(s,historySnapshot){
+ const f=featuresOf(s),preferred=positiveExamples(s.genre).map(v=>v.features);
+ let score=80;
+ score-=Math.abs(f.melDensity-5.5)*2.1;
+ score-=Math.abs(f.kickDensity-(s.genre==='house'?4:3))*1.7;
+ score-=f.syncopation>.85?5:0;
+ let melody=s.events.filter(e=>e.lane==='melody');
+ let pitches=melody.map(e=>e.pitch),range=pitches.length?Math.max(...pitches)-Math.min(...pitches):0;
+ if(range<4)score-=10;
+ if(range>31)score-=9;
+ let repeated=historySnapshot.filter(h=>h.features?.genre===s.genre&&h.features?.progression?.join(',')===f.progression.join(',')).length;
+ score-=Math.min(12,repeated*1.6);
+ if(preferred.length){let avg=preferred.reduce((a,v)=>a+v.melDensity,0)/preferred.length;score-=Math.abs(f.melDensity-avg)*2.5}
+ return Math.round(clamp(score,0,100));
+}
+function batchGenerate(){
+ stopPlayback();const opts=configFromUI();let prior=state.history.slice();let generated=[];
+ for(let i=0;i<12;i++){
+  const s=buildSong(opts);
+  generated.push({song:s,score:compositionScore(s,prior)});
+  state.history.push({features:featuresOf(s),at:Date.now(),id:s.id,source:'generated'});
+ }
+ state.history=state.history.slice(-150);state.generated+=12;
+ batchCandidates=generated.sort((a,b)=>b.score-a.score).slice(0,5);
+ song=deepClone(batchCandidates[0].song);selectedBar=0;persist();renderAll();
+ notify('12 Ideen erstellt. Die 5 strukturell stärksten Kandidaten sind gelistet.');
+}
+function renderBatch(){
+ const root=$('batchResults');root.innerHTML='';
+ if(!batchCandidates.length){root.innerHTML='<div class="subtle">Starte links „Auto-Lab“, um zwölf neue Ideen zu erzeugen.</div>';return}
+ for(let i=0;i<batchCandidates.length;i++){
+  const candidate=batchCandidates[i],row=document.createElement('div');row.className='record';
+  const left=document.createElement('div');let title=document.createElement('div');title.className='record-title';title.textContent='#'+(i+1)+' · '+GENRES[candidate.song.genre].name+' · '+candidate.song.bpm+' BPM';let sub=document.createElement('div');sub.className='record-sub';sub.textContent='Struktur '+candidate.score+'/100 · '+candidate.song.events.length+' Events';left.append(title,sub);
+  let btn=document.createElement('button');btn.textContent=song?.id===candidate.song.id?'Aktiv':'Anhören';btn.onclick=()=>{stopPlayback();song=deepClone(candidate.song);selectedBar=0;renderAll();notify('Idee #'+(i+1)+' geladen. Zum Anhören Play drücken.')};row.append(left,btn);root.appendChild(row)
+ }
+}
+function onRate(rating){if(!song)return;if(song.rated===rating){notify('Dieser Beat hat bereits diese Bewertung.');return}state.ratings=state.ratings.filter(v=>v.id!==song.id);state.ratings.push({id:song.id,rating,features:featuresOf(song),at:Date.now(),source:'rated'});song.rated=rating;state.ratings=state.ratings.slice(-500);persist();renderAll();notify(rating===1?'Positives Feedback gelernt.':'Negatives Feedback gelernt.');}
+function toSec(s){return 60/s.bpm/4}
+function durationSec(s){return s.bars*16*toSec(s)}
+function timeString(n){n=Math.floor(Math.max(0,n));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
+function renderAll(){renderSong();renderLanes();renderMemory();renderBatch();renderLibrary();renderReference();drawTimeline();}
+function renderSong(){if(!song)return;let cfg=GENRES[song.genre],dur=durationSec(song);$('songName').textContent=cfg.name+' / '+PITCH_NAMES[song.root]+' '+song.scale.toUpperCase()+' · #'+song.id.slice(-4).toUpperCase();$('songSummary').textContent='Generativ komponiert · '+new Date(song.createdAt).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' · Seed '+song.seed;$('timeDisplay').textContent='00:00 / '+timeString(dur);$('metaChips').innerHTML='';[song.bpm+' BPM',song.bars+' Takte',song.events.filter(e=>e.lane==='melody').length+' Melodienoten',song.events.length+' Events',song.progression.map(d=>['I','II','III','IV','V','VI','VII'][d]).join(' – ')].forEach(c=>{let el=document.createElement('span');el.className='chip';el.textContent=c;$('metaChips').appendChild(el)});$('learningBadge').textContent=song.rated===1?'POSITIV':song.rated===-1?'NEGATIV':song.biasUsed?'ADAPTIV':'NEU';$('learningBadge').classList.toggle('off',song.rated!==1&& !song.biasUsed);$('save').textContent=state.library.some(t=>t.id===song.id)?'♥ Gespeichert':'♡ Speichern';}
+function renderLanes(){if(!song)return;const total=song.bars;selectedBar=clamp(selectedBar,0,total-1);$('barSelect').innerHTML='';for(let b=0;b<total;b++){let btn=document.createElement('button');btn.textContent=b+1;btn.className=selectedBar===b?'active':'';btn.onclick=()=>{selectedBar=b;renderLanes()};$('barSelect').appendChild(btn)}$('lanes').innerHTML='';
+ for(let lane of LANES){let parent=document.createElement('div');parent.className='lane';let name=document.createElement('div');name.className='lane-label';name.innerHTML='<span class="lane-color" style="background:'+lane.color+'"></span>'+lane.name;parent.appendChild(name);let steps=document.createElement('div');steps.className='steps';for(let st=0;st<16;st++){let current=selectedBar*16+st;let notes=song.events.filter(e=>e.lane===lane.id&&e.start>=current&&e.start<current+1);let active=notes.length>0;let bt=document.createElement('button');bt.className='step'+(active?' on':'');bt.style.setProperty('--step-color',lane.color);bt.title=lane.name+' · Takt '+(selectedBar+1)+' · Step '+(st+1)+(active?' · '+notes.length+' Noten':'');bt.setAttribute('aria-label',bt.title);if(DRUMS.includes(lane.id)){bt.onclick=()=>{let n=song.events.filter(e=>e.lane===lane.id&&e.start===current);if(n.length)song.events=song.events.filter(e=>!(e.lane===lane.id&&e.start>=current&&e.start<current+1));else song.events.push(event(lane.id,current,lane.id==='openhat'?.7:.3,({kick:36,snare:38,hat:42,openhat:46})[lane.id],.7));song.events.sort((a,b)=>a.start-b.start);song.rated=0;state.ratings=state.ratings.filter(v=>v.id!==song.id);renderAll()}}
+ else{bt.onclick=()=>notify('Melodie/Akkorde kannst du nach MIDI-Export in deiner DAW bearbeiten.');}steps.appendChild(bt)}parent.appendChild(steps);$('lanes').appendChild(parent)} }
+function drawTimeline(){if(!song)return;const canvas=$('timeline'),c=canvas.getContext('2d');const W=canvas.width,H=canvas.height;c.clearRect(0,0,W,H);c.fillStyle='#0d111b';c.fillRect(0,0,W,H);for(let b=0;b<=song.bars;b++){let x=b/song.bars*W;c.strokeStyle='#343b4e';c.beginPath();c.moveTo(x,20);c.lineTo(x,H);c.stroke();if(b<song.bars){c.fillStyle='#7682a2';c.font='10px system-ui';c.fillText('0'+(b+1),x+7,16)}}let tracks=['melody','chords','bass','kick','snare','hat','openhat'];for(let k=0;k<tracks.length;k++){let lane=LANES[k];let y=23+k*14;c.fillStyle='#232a37';c.fillRect(0,y+1,W,11);c.fillStyle=lane.color;let events=song.events.filter(e=>e.lane===tracks[k]);for(let e of events){let x=e.start/(song.bars*16)*W;let w=Math.max(2,e.dur/(song.bars*16)*W);let height=tracks[k]==='chords'?8:6;c.globalAlpha=.75;c.fillRect(x,y+1+Math.floor((11-height)/2),w,height);c.globalAlpha=1}}}
+function renderMemory(){let liked=state.ratings.filter(v=>v.rating===1);let examples=positiveExamples($('genre').value);$('generatedCount').textContent=state.generated;$('likedCount').textContent=liked.length;$('referenceCount').textContent=state.references.length;$('samples').textContent=liked.length+state.references.length;$('genreMemory').textContent=examples.length+' Beispiele';$('learningBar').style.width=(Math.min(100,examples.length*12))+'%';let neg=negativeExamples($('genre').value);let box=$('learningInfo');if(examples.length){let avg=examples.reduce((a,e)=>a+e.features.melDensity,0)/examples.length;let avgK=examples.reduce((a,e)=>a+e.features.kickDensity,0)/examples.length;box.textContent='Gelernt in '+GENRES[$('genre').value].name+': Ø '+avg.toFixed(1)+' Melodienoten/Takt, '+avgK.toFixed(1)+' Kicks/Takt. '+neg.length+' negative Beispiele. Die nächsten Generationen können diese Merkmale bevorzugen.'}else box.textContent='Für dieses Genre sind noch keine positiven Beispiele vorhanden. Bewerte Beats oder importiere MIDI-Referenzen.';}
+function renderLibrary(){let lib=$('library');$('libraryTotal').textContent=state.library.length+' Projekte';lib.innerHTML='';if(!state.library.length){lib.innerHTML='<div class="subtle">Noch keine gespeicherten Entwürfe.</div>';return}for(let saved of state.library.slice().reverse()){let row=document.createElement('div');row.className='record';let info=document.createElement('div');info.innerHTML='<div class="record-title"></div><div class="record-sub"></div>';info.children[0].textContent=GENRES[saved.genre]?.name+' · '+PITCH_NAMES[saved.root]+' · '+saved.bpm+' BPM';info.children[1].textContent=saved.events.length+' Noten/Schläge · '+new Date(saved.createdAt).toLocaleDateString('de-DE');let b=document.createElement('button');b.textContent='Öffnen';b.onclick=()=>{stopPlayback();song=deepClone(saved);selectedBar=0;renderAll();notify('Projekt geladen.')};row.append(info,b);lib.appendChild(row)}}
+function renderReference(){let el=$('referenceList');el.innerHTML='';if(!state.references.length){el.innerHTML='<div class="subtle">Noch keine MIDI-Referenzen.</div>';return}for(let ref of state.references.slice().reverse().slice(0,12)){let row=document.createElement('div');row.className='record';let info=document.createElement('div');info.style.minWidth='0';let nm=document.createElement('div');nm.className='record-title file-name';nm.textContent=ref.name;let sub=document.createElement('div');sub.className='record-sub';sub.textContent=GENRES[ref.features.genre]?.name+' · '+Math.round(ref.features.melDensity*10)/10+' Noten/Takt';info.append(nm,sub);let b=document.createElement('button');b.textContent='Entfernen';b.onclick=()=>{state.references=state.references.filter(x=>x.id!==ref.id);persist();renderAll()};row.append(info,b);el.appendChild(row)}}
+function saveSong(){if(!song)return;let idx=state.library.findIndex(v=>v.id===song.id);if(idx<0){state.library.push(deepClone(song));state.library=state.library.slice(-30);notify('Projekt lokal gespeichert.')}else{state.library.splice(idx,1);notify('Aus Favoriten entfernt.')}persist();renderAll()}
+function applyGenre(keepOther=false){let conf=GENRES[$('genre').value];$('bpm').value=conf.bpm;$('scale').value=conf.scale;if(!keepOther){$('energy').value=65;$('complexity').value=55}updateRanges();renderMemory()}
+function updateRanges(){for(let k of ['energy','complexity','influence'])$(k+'Out').textContent=$(k).value+'%'}
+// Web Audio synthesis. Compatible with real-time and offline contexts.
+const noiseCache=new WeakMap();
+function noiseBuffer(ctx){if(noiseCache.has(ctx))return noiseCache.get(ctx);let b=ctx.createBuffer(1,Math.round(ctx.sampleRate*.65),ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;noiseCache.set(ctx,b);return b}
+function outputBus(ctx){let bus=ctx.createGain();bus.gain.value=.72;let compressor=ctx.createDynamicsCompressor();compressor.threshold.value=-17;compressor.knee.value=16;compressor.ratio.value=3;compressor.attack.value=.004;compressor.release.value=.22;bus.connect(compressor);compressor.connect(ctx.destination);return bus}
+function makeOsc(ctx,type,frequency,t,d,vol,output,lowpass=0,slide=0){let osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=type;osc.frequency.setValueAtTime(Math.max(25,frequency),t);if(slide)osc.frequency.exponentialRampToValueAtTime(Math.max(25,frequency*slide),t+Math.min(d*.5,.15));gain.gain.setValueAtTime(.0001,t);gain.gain.linearRampToValueAtTime(Math.max(.0002,vol),t+.009);gain.gain.exponentialRampToValueAtTime(.0001,t+Math.max(.06,d));if(lowpass){let filt=ctx.createBiquadFilter();filt.type='lowpass';filt.frequency.value=lowpass;osc.connect(filt);filt.connect(gain)}else osc.connect(gain);gain.connect(output);osc.start(t);osc.stop(t+Math.max(.08,d)+.015)}
+function makeNoise(ctx,t,d,vol,output,filter='highpass',freq=6000){const src=ctx.createBufferSource(),f=ctx.createBiquadFilter(),gain=ctx.createGain();src.buffer=noiseBuffer(ctx);f.type=filter;f.frequency.value=freq;gain.gain.setValueAtTime(Math.max(.0002,vol),t);gain.gain.exponentialRampToValueAtTime(.0001,t+Math.max(.025,d));src.connect(f);f.connect(gain);gain.connect(output);src.start(t);src.stop(t+Math.min(.63,d)+.01)}
+function synth(ctx,s,offset=0,bus=null){bus=bus||outputBus(ctx);let step=toSec(s),swing=GENRES[s.genre].swing,notes=s.events;
+ for(const e of notes){let pos=e.start,t=offset+pos*step+(Math.floor(pos)%2===1?step*swing:0),dur=clamp(e.dur*step,.03,3),v=e.vel,pitch=e.pitch,freq=440*Math.pow(2,(pitch-69)/12);
+  if(t<0)continue;
+  if(e.lane==='melody'){makeOsc(ctx,s.genre==='rage'?'sawtooth':'triangle',freq,t,dur*.9,v*.14,bus,s.genre==='rage'?3200:2400);makeOsc(ctx,'sine',freq*2,t,dur*.7,v*.055,bus)}
+  else if(e.lane==='chords'){makeOsc(ctx,s.genre==='rage'?'sawtooth':'triangle',freq,t,dur,v*.065,bus,1600)}
+  else if(e.lane==='bass'){makeOsc(ctx,'sine',freq,t,Math.min(2,dur*1.4),v*.51,bus,320,0.94);makeOsc(ctx,'triangle',freq,t,dur,v*.065,bus,450)}
+  else if(e.lane==='kick'){makeOsc(ctx,'sine',145,t,.17,v*.75,bus,0,.29);makeNoise(ctx,t,.028,v*.13,bus,'lowpass',950)}
+  else if(e.lane==='snare'){makeNoise(ctx,t,.16,v*.24,bus,'highpass',1000);makeOsc(ctx,'triangle',190,t,.10,v*.16,bus)}
+  else if(e.lane==='hat')makeNoise(ctx,t,.06,v*.12,bus,'highpass',7600);
+  else if(e.lane==='openhat')makeNoise(ctx,t,.26,v*.19,bus,'highpass',6800);
+ }
+}
+function clearPlaybackTimers(){clearTimeout(loopTimer);clearTimeout(stopTimer);if(animId)cancelAnimationFrame(animId);loopTimer=stopTimer=animId=null}
+async function playSong(){if(!song)return;if(playing){stopPlayback();return}try{let AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('Web Audio wird in diesem Browser nicht unterstützt.');audioCtx=new AC();await audioCtx.resume();playing=true;playStart=audioCtx.currentTime+.09;const duration=durationSec(song);synth(audioCtx,song,playStart);$('play').textContent='❚❚';$('play').style.background='#e6d2ff';const enqueue=(nextStart)=>{const ms=Math.max(10,(nextStart-audioCtx.currentTime-.2)*1000);loopTimer=setTimeout(()=>{if(!playing||!audioCtx)return;if($('loop').checked){synth(audioCtx,song,nextStart);enqueue(nextStart+duration)}},ms)};
+ if($('loop').checked)enqueue(playStart+duration);else stopTimer=setTimeout(stopPlayback,(duration+.15)*1000);
+ const visual=()=>{if(!playing||!audioCtx)return;let elapsed=Math.max(0,audioCtx.currentTime-playStart),local=$('loop').checked?elapsed%duration:Math.min(duration,elapsed);$('timeDisplay').textContent=timeString(local)+' / '+timeString(duration);$('playhead').style.left=((local/duration)*100).toFixed(2)+'%';animId=requestAnimationFrame(visual)};visual();}
+ catch(e){stopPlayback();notify('Audiofehler: '+e.message)}}
+function stopPlayback(){playing=false;clearPlaybackTimers();if(audioCtx){const c=audioCtx;audioCtx=null;c.close().catch(()=>{})}$('play').textContent='▶';$('play').style.background='';$('playhead').style.left='0%';if(song)$('timeDisplay').textContent='00:00 / '+timeString(durationSec(song))}
+function downloadBlob(data,filename,type){let blob=data instanceof Blob?data:new Blob([data],{type});let url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000)}
+function filename(ext){return 'beatforge_'+(song?GENRES[song.genre].name.toLowerCase().replace(/[^a-z0-9]+/g,'_'):'project')+'_'+Date.now()+'.'+ext}
+function varLen(n){n=Math.max(0,Math.floor(n));let b=[n&127];while((n>>=7))b.unshift((n&127)|128);return b}
+function strBytes(s){return Array.from(s,chr=>chr.charCodeAt(0)&255)}
+function u32(n){return [(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255]}
+function u16(n){return [(n>>>8)&255,n&255]}
+function midiTrack(events,name){let data=[0,255,3,...varLen(strBytes(name).length),...strBytes(name)];events.sort((a,b)=>a.tick-b.tick||a.priority-b.priority);let prev=0;for(let e of events){data.push(...varLen(e.tick-prev),...e.data);prev=e.tick}data.push(0,255,47,0);return [...strBytes('MTrk'),...u32(data.length),...data]}
+function encodeMidi(s){const ppq=480,perStep=ppq/4,tempo=Math.round(60000000/s.bpm);let tracks=[];let meta=[{tick:0,priority:0,data:[255,81,3,(tempo>>>16)&255,(tempo>>>8)&255,tempo&255]},{tick:0,priority:1,data:[255,88,4,4,2,24,8]}];tracks.push(midiTrack(meta,'BEATFORGE TEMPO'));
+ let channels={melody:0,chords:1,bass:2,kick:9,snare:9,hat:9,openhat:9};let drumMap={kick:36,snare:38,hat:42,openhat:46};
+ for(let lane of LANES){let events=[];for(let e of s.events.filter(e=>e.lane===lane.id)){let ch=channels[lane.id],pitch=drumMap[lane.id]??e.pitch,vel=clamp(Math.round(e.vel*110),1,127),tick=Math.max(0,Math.round(e.start*perStep)),end=tick+Math.max(1,Math.round(e.dur*perStep));events.push({tick,priority:1,data:[0x90+ch,pitch,vel]},{tick:end,priority:0,data:[0x80+ch,pitch,0]})}tracks.push(midiTrack(events,lane.name))}
+ let data=[...strBytes('MThd'),...u32(6),...u16(1),...u16(tracks.length),...u16(ppq),...tracks.flat()];return new Uint8Array(data)}
+function encodeWav(buffer){let c=buffer.numberOfChannels,n=buffer.length,bytes=44+n*c*2,ab=new ArrayBuffer(bytes),v=new DataView(ab),offset=0;function putText(s){for(let ch of s)v.setUint8(offset++,ch.charCodeAt(0))}function u16v(n){v.setUint16(offset,n,true);offset+=2}function u32v(n){v.setUint32(offset,n,true);offset+=4}putText('RIFF');u32v(bytes-8);putText('WAVEfmt ');u32v(16);u16v(1);u16v(c);u32v(buffer.sampleRate);u32v(buffer.sampleRate*c*2);u16v(c*2);u16v(16);putText('data');u32v(n*c*2);let tracks=Array.from({length:c},(_,i)=>buffer.getChannelData(i));for(let i=0;i<n;i++){for(let k=0;k<c;k++){let sample=clamp(tracks[k][i],-1,1);v.setInt16(offset,sample<0?sample*32768:sample*32767,true);offset+=2}}return new Blob([ab],{type:'audio/wav'})}
+async function exportWav(){if(!song)return;let btn=$('exportWav');try{btn.disabled=true;btn.textContent='WAV wird gerendert …';let len=durationSec(song)+.4,sampleRate=44100;let ctx=new OfflineAudioContext(2,Math.ceil(len*sampleRate),sampleRate);synth(ctx,song,.04);let audio=await ctx.startRendering();downloadBlob(encodeWav(audio),filename('wav'),'audio/wav');notify('WAV-Datei exportiert.')}catch(e){notify('WAV-Export fehlgeschlagen: '+e.message)}finally{btn.disabled=false;btn.textContent='⇩ WAV · Audiomix'}}
+function readVLen(data,at){let n=0,x,count=0;do{if(at>=data.length)throw Error('MIDI unerwartet zu Ende');x=data[at++];n=(n<<7)|(x&127);if(++count>4)throw Error('Ungültige MIDI-Längenangabe')}while(x&128);return [n,at]}
+function parseMidi(buf){let d=new Uint8Array(buf),p=0;function readAscii(n){let s='';while(n--){if(p>=d.length)throw Error('Unvollständige MIDI');s+=String.fromCharCode(d[p++])}return s}function read16(){if(p+2>d.length)throw Error('Datei unvollständig');let x=(d[p]<<8)|d[p+1];p+=2;return x}function read32(){if(p+4>d.length)throw Error('Datei unvollständig');let x=(d[p]*16777216+d[p+1]*65536+d[p+2]*256+d[p+3]);p+=4;return x}if(readAscii(4)!=='MThd')throw Error('Keine gültige Standard-MIDI-Datei');let headerLength=read32(),format=read16(),trackCount=read16(),division=read16();if(headerLength<6||division&32768)throw Error('MIDI-Format nicht unterstützt (SMPTE-Timing)');p+=headerLength-6;if(format>1||trackCount>128)throw Error('MIDI-Format nicht unterstützt');let notes=[],tempo=500000;
+ for(let tr=0;tr<trackCount;tr++){if(readAscii(4)!=='MTrk')throw Error('Defekter MIDI-Track');let size=read32(),end=p+size;if(end>d.length)throw Error('Unvollständiger MIDI-Track');let tick=0,status=0,active=new Map();while(p<end){let [delta,nx]=readVLen(d,p);p=nx;tick+=delta;let byte=d[p];if(byte<128){if(status<128||status>=240)throw Error('Ungültiger MIDI-Running-Status')}else{status=d[p++]}if(status===255){let typ=d[p++],len;[len,p]=readVLen(d,p);if(typ===81&&len===3)tempo=(d[p]<<16)|(d[p+1]<<8)|d[p+2];p+=len;continue}if(status===240||status===247){let len;[len,p]=readVLen(d,p);p+=len;continue}let action=status&240,chan=status&15,vals=(action===192||action===208)?1:2;let pitch=d[p++],vel=vals===2?d[p++]:0;if(action===144&&vel>0){let k=chan+':'+pitch;if(!active.has(k))active.set(k,[]);active.get(k).push({tick,pitch,vel,chan})}else if(action===128||(action===144&&vel===0)){let k=chan+':'+pitch,ar=active.get(k);if(ar?.length){let n=ar.shift();notes.push({...n,duration:Math.max(1,tick-n.tick)})}}if(notes.length>30000)throw Error('MIDI zu groß (>30.000 Noten)')}
+ p=end}
+ if(!notes.length)throw Error('MIDI enthält keine Noten');return {notes,ppq:division,tempo};
+}
+function inferMidiKey(pitched,ppq){
+ const chroma=Array(12).fill(0),tonic=Array(12).fill(0);
+ for(const n of pitched){let c=n.pitch%12,weight=clamp(n.duration/ppq,.2,2);chroma[c]+=weight;
+  if(n.tick%(ppq*4)<ppq*.3 && n.pitch<65)tonic[c]+=2.5;
+ }
+ let best={score:-Infinity,root:0,scale:'minor'};
+ for(const mode of ['major','minor'])for(let root=0;root<12;root++){
+  let allowed=new Set(SCALES[mode].map(v=>(root+v)%12));
+  let score=0;for(let c=0;c<12;c++)score+=chroma[c]*(allowed.has(c)?1:-2.1);
+  score+=tonic[root]*1.5+chroma[root]*.15+chroma[(root+7)%12]*.035;
+  if(score>best.score)best={score,root,scale:mode};
+ }
+ return best;
+}
+function analyzeMidi(parsed,genre){
+ let {notes,ppq,tempo}=parsed;
+ let pitched=notes.filter(n=>n.chan!==9&&n.pitch>=35),drums=notes.filter(n=>n.chan===9),mel=pitched.filter(n=>n.pitch>=60);
+ if(mel.length<3)mel=pitched;
+ mel=mel.sort((a,b)=>a.tick-b.tick).slice(0,3000);
+ let totalTicks=Math.max(ppq*4,...notes.map(n=>n.tick+n.duration)),bars=Math.max(1,totalTicks/(ppq*4));
+ const key=inferMidiKey(pitched,ppq),allowed=SCALES[key.scale];
+ const progression=[];
+ for(let bar=0;bar<4;bar++){
+  let segment=pitched.filter(n=>Math.floor(n.tick/(ppq*4))%4===bar);
+  let bass=segment.filter(n=>n.pitch<65),pool=bass.length?bass:segment;
+  pool.sort((a,b)=>a.tick-b.tick||a.pitch-b.pitch);
+  let c=pool.length?(pool[0].pitch-key.root+120)%12:allowed[[0,5,3,6][bar]];
+  let d=allowed.findIndex(v=>v===c);
+  if(d<0){let distances=allowed.map(v=>Math.min((c-v+12)%12,(v-c+12)%12));d=distances.indexOf(Math.min(...distances))}
+  progression.push(d);
+ }
+ let mean=mel.length?mel.reduce((a,n)=>a+n.pitch,0)/mel.length:72;
+ let rhythmic=mel.map(n=>Math.round(n.tick/ppq*4)%16);
+ return {genre,bpm:clamp(Math.round(60000000/tempo),40,260),root:key.root,scale:key.scale,energy:60,complexity:60,
+  melDensity:mel.length/bars,kickDensity:drums.filter(n=>n.pitch===36||n.pitch===35).length/bars,
+  hatDensity:drums.filter(n=>n.pitch===42||n.pitch===44).length/bars,meanPitch:mean,
+  intervals:mel.slice(1,90).map((n,i)=>clamp(n.pitch-mel[i].pitch,-12,12)),
+  rhythm:rhythmic.slice(0,80),progression,
+  syncopation:rhythmic.length?rhythmic.filter(v=>v%4!==0).length/rhythmic.length:.5}
+}
+
+async function importMIDI(file){if(!file)return;if(file.size>2*1024*1024)throw Error('Maximal 2 MB MIDI pro Datei');let p=parseMidi(await file.arrayBuffer()),f=analyzeMidi(p,$('genre').value);const id=Date.now().toString(36)+Math.random().toString(16).slice(2);state.references.push({id,name:file.name.slice(0,100),features:f,at:Date.now(),source:'midi'});state.references=state.references.slice(-60);persist();renderAll();notify('MIDI analysiert: '+p.notes.length+' Noten · '+f.bpm+' BPM. Als Stil-Referenz gespeichert.')}
+function loadTraining(file){if(!file)return;return file.text().then(raw=>{if(raw.length>5000000)throw Error('Datei zu groß');let d=JSON.parse(raw);if(d.version!==1||!Array.isArray(d.ratings)||!Array.isArray(d.references)||!Array.isArray(d.library)||!Array.isArray(d.history))throw Error('Ungültige Trainingsdatei');state={version:1,generated:clamp(+d.generated||0,0,1000000),ratings:d.ratings.slice(-500),references:d.references.slice(-60),library:d.library.slice(-30),history:d.history.slice(-150)};persist();renderAll();notify('Trainingsdaten geladen.')})}
+function bind(){
+ $('genre').onchange=()=>applyGenre();for(let k of ['energy','complexity','influence'])$(k).oninput=updateRanges;
+ $('generate').onclick=()=>updateSong('new');$('batchGenerate').onclick=batchGenerate;$('surprise').onclick=()=>updateSong('surprise');$('variant').onclick=()=>updateSong('variation');
+ $('regenMelody').onclick=()=>regenerate('melody');$('regenDrums').onclick=()=>regenerate('drums');$('regenBass').onclick=()=>regenerate('bass');
+ $('play').onclick=playSong;$('stop').onclick=stopPlayback;$('loop').onchange=()=>{if(playing){stopPlayback();notify('Loop-Modus geändert: Wiedergabe neu starten.')}};$('save').onclick=saveSong;$('like').onclick=()=>onRate(1);$('dislike').onclick=()=>onRate(-1);
+ $('exportMidi').onclick=()=>song&&downloadBlob(encodeMidi(song),filename('mid'),'audio/midi');$('exportWav').onclick=exportWav;
+ $('exportJson').onclick=()=>song&&downloadBlob(JSON.stringify(song,null,2),filename('json'),'application/json');
+ $('importButton').onclick=()=>$('midiInput').click();$('midiInput').onchange=async e=>{try{await importMIDI(e.target.files[0])}catch(ex){notify('MIDI-Fehler: '+ex.message)}finally{e.target.value=''}};
+ $('exportTraining').onclick=()=>downloadBlob(JSON.stringify(state,null,2),'beatforge_training_'+Date.now()+'.json','application/json');
+ $('importTraining').onclick=()=>$('trainingInput').click();$('trainingInput').onchange=async e=>{try{await loadTraining(e.target.files[0])}catch(ex){notify('Import fehlgeschlagen: '+ex.message)}finally{e.target.value=''}};
+ $('resetTraining').onclick=()=>{if(!confirm('Alle Bewertungen, MIDI-Referenzen, Historie und Favoriten unwiderruflich löschen? Vorher Trainingsdaten exportieren!'))return;state={generated:0,ratings:[],references:[],library:[],history:[],version:1};persist();renderAll();notify('Lernspeicher zurückgesetzt.')};
+ window.addEventListener('beforeunload',()=>stopPlayback());
+}
+ensureState();bind();updateRanges();updateSong('new');
+// Test-friendly API; no network or external dependencies.
+window.Beatforge={getSong:()=>deepClone(song),getState:()=>deepClone(state),generate:()=>updateSong('new'),like:()=>onRate(1),dislike:()=>onRate(-1),exportMidiBytes:()=>encodeMidi(song),parseMidi,analyzeMidi,featuresOf};
+</script>
+<script>
+
+(function installPocketInterface(){
+ const layout=document.querySelector('.layout');
+ if(!layout || !window.Beatforge)return;
+ const left=[...layout.querySelectorAll(':scope > aside.column:first-child > .panel')];
+ const center=[...layout.querySelectorAll(':scope > main.column > .panel')];
+ const right=[...layout.querySelectorAll(':scope > aside.column.right > .panel')];
+ if(left.length!==2 || center.length!==3 || right.length!==3)return;
+ const [generator, exportBox]=left;
+ const [player, lab, projects]=center;
+ const [learning, importer, training]=right;
+ generator.id='generatorPanel';
+ const shell=document.querySelector('.shell');
+ const appbar=document.createElement('header');
+ appbar.className='pocket-bar';
+ appbar.innerHTML=`<div class="pocket-identity"><div class="pocket-mark">≋</div><div><div class="pocket-name">BEATFORGE</div><div class="pocket-sub">POCKET STUDIO · V1.1</div></div></div><span class="pocket-status">LOKAL</span>`;
+ const stage=document.createElement('div');stage.className='pocket-stage';
+ const tabs={};
+ for(const id of ['studio','editor','ideas','learn','export']){
+  const panel=document.createElement('section');panel.id=id+'Tab';panel.className='pocket-tab';panel.setAttribute('role','tabpanel');panel.setAttribute('aria-label', {studio:'Studio',editor:'Sequencer',ideas:'Ideen',learn:'Lernen',export:'Export'}[id]);tabs[id]=panel;stage.append(panel);
+ }
+ const intro=document.createElement('div');intro.className='pocket-intro';
+ intro.innerHTML='<div class="pocket-kicker">GENERATE · LISTEN · LEARN</div><h1>Dein nächster <span>Beat.</span></h1><p>Beats erzeugen, live anhören und deinen eigenen Sound entwickeln – direkt auf deinem Handy.</p>';
+ tabs.studio.append(intro);
+ // Preserve original generation controls, moving only the advanced settings inside a collapsed region.
+ const pairs=[...generator.querySelectorAll(':scope > .pair')];
+ const stack=generator.querySelector(':scope > .stack');
+ const advanced=document.createElement('details');advanced.className='mobile-advanced';
+ const summary=document.createElement('summary');summary.textContent='Erweiterte Einstellungen';advanced.append(summary);
+ if(pairs[0])advanced.append(pairs[0]);
+ for(const id of ['energy','complexity','influence']){
+  const field=generator.querySelector('#'+id)?.closest('.field');
+  if(field)advanced.append(field);
+ }
+ generator.insertBefore(advanced,stack);
+ const batch=document.getElementById('batchGenerate');
+ tabs.studio.append(generator,player);
+ const ratebar=document.createElement('div');ratebar.className='mobile-ratebar';
+ ratebar.innerHTML='<button class="btn" id="quickLike">♥ Guter Beat</button><button class="btn" id="quickDislike">× Überspringen</button>';
+ tabs.studio.append(ratebar);
+ ratebar.querySelector('#quickLike').onclick=()=>document.getElementById('like').click();
+ ratebar.querySelector('#quickDislike').onclick=()=>{document.getElementById('dislike').click();document.getElementById('generate').click();window.scrollTo({top:0,behavior:'smooth'})};
+ const mini=document.createElement('p');mini.className='mobile-mini-note';mini.textContent='Bewertungen verbessern künftige Vorschläge. Keine Cloud, keine Anmeldung.';tabs.studio.append(mini);
+ const edit=document.createElement('section');edit.className='panel';
+ const editHeader=document.createElement('div');editHeader.className='panel-title';editHeader.innerHTML='<h2>Step Sequencer</h2><small>Drums bearbeiten</small>';edit.append(editHeader);
+ const tracks=player.querySelector('.tracks-head');const lanes=player.querySelector('#lanes');const hint=lanes?.nextElementSibling;const regen=player.querySelector('.export-row');
+ if(tracks)edit.append(tracks);
+ if(lanes){const scroller=document.createElement('div');scroller.className='editor-scroll';scroller.append(lanes);edit.append(scroller)}
+ if(hint)edit.append(hint);
+ if(regen)edit.append(regen);
+ tabs.editor.append(edit);
+ if(batch)lab.querySelector('.panel-title')?.after(batch);
+ tabs.ideas.append(lab,projects);
+ tabs.learn.append(learning,importer,training);
+ const exportIntro=document.createElement('div');exportIntro.className='pocket-intro';exportIntro.innerHTML='<div class="pocket-kicker">SAVE · SHARE · PRODUCE</div><h1>Deine <span>Exports.</span></h1><p>Schicke Melodien als MIDI in FL Studio Mobile oder sichere deinen Beat als WAV.</p>';
+ tabs.export.append(exportIntro,exportBox);
+ const exportTip=document.createElement('p');exportTip.className='pocket-export-tip';exportTip.textContent='iPhone: Öffne einen Export über den Teilen-Dialog und wähle „In Dateien sichern“. MIDI lässt sich anschließend in kompatible Musik-Apps importieren. WAV verwendet einfache Synthesizer-Klänge.';tabs.export.append(exportTip);
+ // Place the new mobile shell and remove only the old wrappers, not their moved descendants.
+ shell.insertBefore(appbar,shell.firstChild);
+ shell.append(stage);
+ layout.remove();
+ const nav=document.createElement('nav');nav.className='mobile-tabs';nav.setAttribute('aria-label','Hauptnavigation');
+ nav.innerHTML='<div class="mobile-tabs-inner">'+[
+  ['studio','▣','Studio'],['editor','▦','Editor'],['ideas','✦','Ideen'],['learn','◈','Lernen'],['export','⇩','Export']
+ ].map(([id,ico,name])=>`<button type="button" class="mobile-navitem" data-tab="${id}" aria-label="${name}" aria-controls="${id}Tab"><span class="navicon" aria-hidden="true">${ico}</span><span>${name}</span></button>`).join('')+'</div>';
+ document.body.append(nav);
+ let selected='studio';
+ function showTab(id,scroll=true){if(!tabs[id])return;selected=id;for(const [tid,el] of Object.entries(tabs)){const active=id===tid;el.classList.toggle('active',active);el.hidden=!active;el.setAttribute('aria-hidden',String(!active))}for(const b of nav.querySelectorAll('[data-tab]')){const active=b.dataset.tab===id;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active));b.setAttribute('tabindex',active?'0':'-1')}if(scroll)window.scrollTo({top:0,behavior:'instant'});}
+ for(const b of nav.querySelectorAll('[data-tab]'))b.addEventListener('click',()=>showTab(b.dataset.tab));
+ showTab('studio',false);
+ // Mobile Safari usually handles save/share of exported files more reliably through Web Share.
+ const legacyDownload=downloadBlob;
+ downloadBlob=function(data,fileName,mime){
+  const blob=data instanceof Blob?data:new Blob([data],{type:mime});
+  const f=new File([blob],fileName,{type:mime||'application/octet-stream'});
+  if(navigator.share && navigator.canShare && navigator.canShare({files:[f]})){
+   navigator.share({files:[f],title:fileName}).catch(err=>{if(err?.name!=='AbortError')legacyDownload(blob,fileName,mime)});
+  }else legacyDownload(blob,fileName,mime);
+ };
+ // Make the navigation discoverable to non-visual assistive technology.
+ window.BeatforgePocket={showTab,activeTab:()=>selected};
+})();
+
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol==='https:') {
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
