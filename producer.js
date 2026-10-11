@@ -80,6 +80,7 @@
  function renderSongExtras(){if(!song)return;ensureMix(song);const bpm=el('proBpm'),title=el('proTitle');if(bpm&&document.activeElement!==bpm)bpm.value=song.bpm;if(title&&document.activeElement!==title)title.value=song.title||'';el('proSaved')&&(el('proSaved').textContent='● Lokal');}
  function refresh(){if(!song)return;renderSongExtras();renderArrangement();renderPiano();renderMixer();draftSave()}
  async function exportStem(){if(!song)return;const which=el('proStemTrack').value;if(!tracks.includes(which))return;const btn=el('proExportStem');btn.disabled=true;btn.textContent='Stem wird gerendert …';try{
+  await window.BeatforgeSampleEngine?.ensureForSong(song);
   const trimmed=deepClone(song);ensureMix(trimmed);trimmed.mix.master=1;
   for(const lane of tracks){trimmed.mix[lane].mute=lane!==which;trimmed.mix[lane].solo=false;trimmed.mix[lane].volume=1;trimmed.mix[lane].pan=0}
   const length=Math.min(180,durationSec(trimmed)+.4),sr=44100;const ctx=new OfflineAudioContext(2,Math.ceil(sr*length),sr);
