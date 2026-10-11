@@ -45,9 +45,19 @@
   function getDecoder(){if(!decodeCtx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('AudioContext nicht verfügbar');decodeCtx=new AC()};return decodeCtx}
   async function readOne(path){if(bufferCache.has(path))return bufferCache.get(path);if(requests.has(path))return requests.get(path);
     const work=(async()=>{
-      const response=await fetch(ROOT+path,{cache:'force-cache'});
-      if(!response.ok)throw Error(`HTTP ${response.status}: ${path}`);
-      const binary=await response.arrayBuffer();if(binary.byteLength<80||binary.byteLength>15000000)throw Error('Ungültiges WAV: '+path);
+      // Prefer licensed prerecorded WAVs embedded in a verified offline sample bank.
+      const embedded=window.BeatforgeSampleBank?.[path];
+      let binary;
+      if(typeof embedded==='string'&&embedded.length>100){
+        const decoded=atob(embedded),bytes=new Uint8Array(decoded.length);
+        for(let i=0;i<decoded.length;i++)bytes[i]=decoded.charCodeAt(i);
+        binary=bytes.buffer;
+      }else{
+        const response=await fetch(ROOT+path,{cache:'force-cache'});
+        if(!response.ok)throw Error(`HTTP ${response.status}: ${path}`);
+        binary=await response.arrayBuffer();
+      }
+      if(binary.byteLength<80||binary.byteLength>15000000)throw Error('Ungültiges WAV: '+path);
       const buffer=await getDecoder().decodeAudioData(binary.slice(0));
       if(!buffer.duration||!Number.isFinite(buffer.duration))throw Error('Beschädigtes Audio: '+path);
       bufferCache.set(path,buffer);fail.delete(path);return buffer;
