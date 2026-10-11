@@ -37,7 +37,9 @@
     html+='<button type="button" class="piano-cell '+(inside?'in-scale ':'out-scale ')+(st%4===0?'measure ':'')+(note?'has-note ':'')+(onset?'note-start ':'')+(selected?'selected-note ':'')+'" data-p="'+p+'" data-step="'+st+'" aria-label="'+pitchLabel(p)+', Schritt '+(st+1)+(note?', Note vorhanden':'')+'" title="'+pitchLabel(p)+' · Step '+(st+1)+'"></button>';
    }html+='</div>';
   }
-  root.innerHTML=html;if(root.dataset.viewKey===viewKey)root.scrollTop=previousScroll;else {root.dataset.viewKey=viewKey;root.scrollTop=460}el('proEventCount').textContent=song.events.filter(e=>e.lane===currentLane).length+' Noten';renderSelection();buttons();
+  root.innerHTML=html;const visible=root.clientHeight>0;
+  if(visible){root.scrollTop=(root.dataset.viewKey===viewKey&&root.dataset.positioned==='1')?previousScroll:460;root.dataset.positioned='1'}
+  else root.dataset.positioned='0';root.dataset.viewKey=viewKey;el('proEventCount').textContent=song.events.filter(e=>e.lane===currentLane).length+' Noten';renderSelection();buttons();
  }
  function selectEvent(n){if(!n){selection=null;renderSelection();return}selection={lane:n.lane,start:n.start,pitch:n.pitch};renderSelection()}
  function chosen(){if(!selection||!song)return null;return song.events.find(e=>e.lane===selection.lane&&e.start===selection.start&&e.pitch===selection.pitch)||null}
@@ -125,6 +127,7 @@
   const oldNav=el('editorTab');oldNav.querySelector('.tracks-head strong').textContent='Step Sequencer / Drum-Editor';
   document.querySelector('.pocket-sub')&&(document.querySelector('.pocket-sub').textContent='PRODUCER STUDIO · V2.0');
   const menu=document.querySelector('.mobile-navitem[data-tab="editor"] span:last-child');if(menu)menu.textContent='Producer';
+  document.querySelector('.mobile-navitem[data-tab="editor"]')?.addEventListener('click',()=>requestAnimationFrame(()=>renderPiano()));
   const footer=document.querySelector('.footer');if(footer)footer.textContent='BEATFORGE / PRODUCER 2.0 · Touch DAW · lokales Kompositions- und Demo-Studio';
   window.BeatforgePro={refresh,undo:()=>revert(),redo:()=>revert(true),getMix:()=>deepClone(ensureMix(song)),setLane:name=>{if(pitched.includes(name)){currentLane=name;renderPiano()}},loadDraft,validateSong};
   refresh();
