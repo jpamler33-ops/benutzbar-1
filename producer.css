@@ -1,0 +1,53 @@
+/* BEATFORGE PRODUCER 2 · mobile-first touch DAW */
+.pro-panel{border-color:#38324e;background:linear-gradient(145deg,#191a2c,#111521 70%);box-shadow:0 15px 38px #0003}
+.pro-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:15px}
+.pro-heading h2{font-size:19px;letter-spacing:-.045em;margin:2px 0 3px}
+.pro-heading p{font-size:11px;line-height:1.55;color:#a3a9c0;max-width:400px;margin:0}
+.pro-kicker{font-size:9px;font-weight:850;letter-spacing:.16em;color:#bd9af8}
+.pro-pill{font-size:9px;border:1px solid #6a568e;color:#ceb7fc;background:#2e2544;padding:5px 8px;border-radius:40px;font-weight:800;white-space:nowrap}
+.pro-autosave{color:#69e6b6;font-size:10px;font-weight:700;white-space:nowrap}
+.pro-toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:13px}
+.pro-toolbar label{font-size:10px;font-weight:750;color:#9ea4bb;display:flex;flex:1 1 84px;flex-direction:column;gap:6px;min-width:0}
+.pro-toolbar select,.pro-toolbar input{min-height:42px;background:#121523;border-radius:10px;color:#f1eafa;border:1px solid #423c58;width:100%;font-size:12px}
+.pro-nav-row{display:flex;align-items:center;gap:9px;margin:14px 0 10px}
+.pro-nav-row .btn{width:36px;height:36px;min-height:36px;flex:none;font-size:22px;padding:0}
+.pro-nav-row strong{font-size:12px;color:#ecddff}.pro-nav-row small{font-size:10px;color:#a4a5b9;margin-left:auto}
+.piano-grid{--piano-height:29px;background:#0e1220;border:1px solid #38374a;border-radius:12px;overflow:auto;max-height:415px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-color:#484069 #101321}
+.piano-head,.piano-row{display:grid;grid-template-columns:51px repeat(16,minmax(24px,1fr));min-width:470px}
+.piano-head{height:28px;position:sticky;top:0;z-index:5;background:#1e1e33;border-bottom:1px solid #4f475e}
+.piano-head-key,.piano-head-step{display:flex;align-items:center;justify-content:center;font-size:10px;color:#8b93ad}
+.piano-head-key{position:sticky;left:0;background:#191b2d;z-index:7;border-right:1px solid #49435b;font-size:9px}
+.piano-head-step.beat-start{color:#d6baff;font-weight:850}
+.piano-row{height:var(--piano-height);border-bottom:1px solid #24273b}
+.piano-key{position:sticky;left:0;z-index:2;background:#d6d6e8;color:#121421;border-bottom:1px solid #a0a0b0;padding:3px 5px;display:flex;align-items:center;font-size:10px;font-weight:800}
+.piano-key.blackkey{background:#353148;color:#efe9ff;border-color:#191726}
+.piano-cell{height:var(--piano-height);min-width:24px;border:0;border-right:1px solid #28283f;border-radius:0;background:#161c2a;padding:0;position:relative;touch-action:manipulation}
+.piano-cell.out-scale{background:#101321}.piano-cell.measure{border-left:2px solid #4b3e65}.piano-cell.has-note{background:#7454b0;box-shadow:inset 0 1px 0 #b59df3,inset 0 -1px 0 #38265b}
+.piano-cell.note-start{background:#bc98f8;border-top-left-radius:4px;border-bottom-left-radius:4px}
+.piano-cell.note-start::after{content:'';position:absolute;left:3px;top:6px;bottom:6px;width:2px;background:#fff6}
+.piano-cell.selected-note{outline:2px solid #87f4cf;outline-offset:-2px;background:#92b6bf;z-index:1}
+.piano-cell:active{filter:brightness(1.4)}
+.pro-selection{display:flex;flex-direction:column;gap:9px;margin-top:14px;background:#14172a;border:1px solid #35324a;border-radius:12px;padding:11px}
+.pro-selection strong{display:block;margin-top:4px;font-size:12px}.pro-note-actions{display:flex;flex-wrap:wrap;gap:6px}
+.pro-note-actions .btn{min-height:35px;flex:1 0 auto;font-size:10px;padding:8px}
+.pro-utility{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:12px}
+.pro-utility .btn{font-size:10px;padding:8px 4px;min-height:39px}
+.pro-danger{border-color:#684257;color:#faa3c5;background:#271b2a}
+.pro-footnote{font-size:10px;color:#929bb3;line-height:1.65;margin:13px 0 0}
+.pro-arrange{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.pro-arrange-bar{display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:#1b1e31;border:1px solid #3f3e57;border-radius:9px;padding:9px 8px;min-height:66px;text-align:left;color:#d8d6ed}
+.pro-arrange-bar.active{border-color:#b798ff;background:#44325f;box-shadow:inset 0 0 0 1px #bb92eb}
+.pro-arrange-bar strong{font-size:9px;color:#e4d7fa;letter-spacing:.06em}.pro-arrange-bar span{font-size:9px;color:#adb0c6}.pro-arrange-bar .arrange-num{font-size:13px;font-weight:850;color:#f4efff}
+.pro-mixer{display:flex;flex-direction:column;gap:6px}
+.pro-channel{background:#141828;border:1px solid #2d354b;border-radius:10px;padding:9px 7px;display:grid;grid-template-columns:minmax(84px,1fr) minmax(78px,1.15fr) 29px 29px;gap:7px;align-items:center}
+.pro-channel-name{display:flex;gap:7px;align-items:center;min-width:0}.pro-channel-name strong{font-size:11px;display:block;white-space:nowrap}.pro-channel-name small{font-size:9px;display:block;color:#9099b1}.mix-dot{display:block;flex:none;width:7px;height:25px;border-radius:10px}
+.pro-level{display:flex;gap:5px;align-items:center;min-width:0}.pro-level input{min-width:0;flex:1;width:100%;accent-color:#ab82fb}.pro-level output{font-size:9px;color:#9bacc8;width:28px;text-align:right}
+.mix-btn{width:29px;height:35px;border-radius:7px;border:1px solid #45445c;background:#202339;color:#9ca5c0;font-size:11px;font-weight:900;padding:0}
+.mix-btn.is-muted{background:#723c5b;color:#ffd5e5;border-color:#ec80ab}.mix-btn.is-solo{background:#265546;color:#a0f9cf;border-color:#6addac}
+.pro-master{display:flex;gap:13px;align-items:center;margin:14px 0 15px;background:#24243b;border:1px solid #494267;border-radius:10px;padding:12px}
+.pro-master label{font-size:10px;font-weight:850;letter-spacing:.08em;color:#e2d3fc}.pro-master input{flex:1;min-width:0;accent-color:#b58eff}.pro-master output{font-size:11px;font-weight:800;min-width:36px;text-align:right}
+.pro-stem{border-top:1px solid #39364d;margin-top:19px;padding-top:16px;display:flex;flex-direction:column;gap:9px}
+.pro-stem>label{font-size:11px;color:#c4bdde;font-weight:700;display:flex;flex-direction:column;gap:6px}.pro-stem select,.pro-stem input{min-height:42px;background:#101522;border:1px solid #484059;border-radius:10px;color:#f4eeff;width:100%;padding:8px}
+.pro-stem .pro-project-import{padding:12px;background:#191b2c;border:1px dashed #665480;border-radius:9px;margin-top:5px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media (max-width:355px){.pro-channel{grid-template-columns:minmax(64px,1fr) minmax(55px,1fr) 26px 26px;gap:5px;padding:7px 5px}.mix-btn{width:26px}.pro-level output{display:none}.pro-arrange{grid-template-columns:repeat(3,minmax(0,1fr))}}
