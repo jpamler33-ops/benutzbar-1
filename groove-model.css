@@ -1,0 +1,11 @@
+.gm-panel{border:1px solid #625f9a;background:linear-gradient(140deg,#211d35,#131a28);margin:12px 0}
+.gm-kicker{font-size:10px;letter-spacing:.17em;color:#ccb8ff;font-weight:800}
+.gm-panel h2{font-size:21px;margin:7px 0}
+.gm-copy,.gm-licence{font-size:12px;color:#b4b8d2;line-height:1.55}
+.gm-statushead{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;font-weight:700;font-size:12px}
+.gm-statushead a,.gm-licence a{color:#cab4ff}
+.gm-state{border:1px solid #665084;background:#1e1a31;padding:12px;border-radius:12px;line-height:1.5;font-size:12px}
+.gm-state[data-ready="true"]{border-color:#4e9e82;color:#b3e6d2}
+.gm-field{display:block;font-size:12px;font-weight:700;margin-top:10px}
+.gm-field select{display:block;margin-top:7px;width:100%;color:#fff;background:#161925;border:1px solid #514d6f;border-radius:10px;min-height:45px;padding:10px;font-size:16px}
+.gm-check{width:100%;margin-top:12px;min-height:44px}
