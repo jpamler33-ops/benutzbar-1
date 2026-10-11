@@ -38,17 +38,27 @@ jobs:
               rel=file.relative_to(folder).as_posix()
               bank[rel]=base64.b64encode(data).decode('ascii')
               checksums[rel]=hashlib.sha256(data).hexdigest()
-          output='// Licensed CC0 prerecorded WAV one-shots; see SAMPLES-LICENSE.md.\n'
-          output+='window.BeatforgeSampleBank=Object.freeze('+json.dumps(bank,separators=(',',':'))+');\n'
-          output+='window.BeatforgeSampleBankMeta=Object.freeze('+json.dumps({'count':len(files),'sha256':checksums},separators=(',',':'))+');\n'
-          Path('samplebank.js').write_text(output,encoding='utf-8')
-          print('Packaged',len(files),'recorded one-shot WAVs in',len(output),'UTF-8 bytes')
+          paths=sorted(bank)
+          groups={
+              'hard-a':[p for p in paths if p.startswith('hard/')][:5],
+              'hard-b':[p for p in paths if p.startswith('hard/')][5:],
+              'bounce':[p for p in paths if p.startswith('bounce/')],
+              'vintage':[p for p in paths if p.startswith('vintage/')],
+          }
+          assert sum(map(len,groups.values()))==20
+          for group,subpaths in groups.items():
+              b={p:bank[p] for p in subpaths}
+              code='// Embedded CC0 WAV samples; see SAMPLES-LICENSE.md.\\n'
+              code+='window.BeatforgeSampleBank=Object.assign(window.BeatforgeSampleBank||{},'+json.dumps(b,separators=(',',':'))+');\\n'
+              Path('samplebank-'+group+'.js').write_text(code,encoding='utf-8')
+              print(group,len(subpaths),'files',len(code),'characters')
+          Path('samplebank.js').unlink(missing_ok=True)
           PY
       - name: Commit sample bank
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add samplebank.js
+          git add -A .
           if ! git diff --staged --quiet; then
             git commit -m "Build offline CC0 WAV sample bank"
             git push origin HEAD:main
