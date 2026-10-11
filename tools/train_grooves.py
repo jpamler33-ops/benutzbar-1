@@ -169,9 +169,10 @@ def make_grid(row,name):
 
 
 def train(records):
-    sets=[]; examples=0; usable=0; note_total=0; by_bucket=collections.Counter(); sample_keys=[]
+    sets=[]; examples=0; usable=0; note_total=0; by_bucket=collections.Counter(); sample_keys=[]; diagnostics=[]
     for name,row in records:
         examples+=1
+        if examples<=3: diagnostics.append((name,row))
         entry=make_grid(row,name)
         if not entry:continue
         bpm,grid=entry
@@ -181,6 +182,7 @@ def train(records):
         sets.append((name,grid,bucket))
         if len(sample_keys)<5:sample_keys.append(name)
     if usable<20:
+        for name,record in diagnostics: print("SAMPLE_RECORD",name, json.dumps(record, ensure_ascii=False)[:2500])
         raise ValueError(f'Insufficient labeled drum loops: {usable}/{examples} usable; expected >=20. Review WaivOps schema before training; no fake model emitted.')
     rng=random.Random(42); rng.shuffle(sets)
     nvalid=max(1,int(len(sets)*.15)); trainset,validset=sets[nvalid:],sets[:nvalid]
