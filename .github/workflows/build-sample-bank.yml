@@ -1,0 +1,55 @@
+name: Build CC0 WAV Sample Bank
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'samples/**'
+      - '.github/workflows/build-sample-bank.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: true
+      - name: Verify and package source WAV samples
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import wave, base64, hashlib, json
+          folder=Path('samples')
+          files=sorted(folder.rglob('*.wav'))
+          assert len(files)==20, f'Expected 20 verified CC0 sources, got {len(files)}'
+          bank={}
+          checksums={}
+          for file in files:
+              data=file.read_bytes()
+              assert data[:4]==b'RIFF' and data[8:12]==b'WAVE', f'Invalid WAV: {file}'
+              assert len(data)>100, f'Empty WAV: {file}'
+              try:
+                  with wave.open(str(file),'rb') as audio:
+                      assert audio.getnframes()>0
+              except wave.Error as e:
+                  raise ValueError(f'Invalid WAV: {file}: {e}') from e
+              rel=file.relative_to(folder).as_posix()
+              bank[rel]=base64.b64encode(data).decode('ascii')
+              checksums[rel]=hashlib.sha256(data).hexdigest()
+          output='// Licensed CC0 prerecorded WAV one-shots; see SAMPLES-LICENSE.md.\n'
+          output+='window.BeatforgeSampleBank=Object.freeze('+json.dumps(bank,separators=(',',':'))+');\n'
+          output+='window.BeatforgeSampleBankMeta=Object.freeze('+json.dumps({'count':len(files),'sha256':checksums},separators=(',',':'))+');\n'
+          Path('samplebank.js').write_text(output,encoding='utf-8')
+          print('Packaged',len(files),'recorded one-shot WAVs in',len(output),'UTF-8 bytes')
+          PY
+      - name: Commit sample bank
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add samplebank.js
+          if ! git diff --staged --quiet; then
+            git commit -m "Build offline CC0 WAV sample bank"
+            git push origin HEAD:main
+          fi
